@@ -5,7 +5,8 @@ Projection "perspective"
 WorldBegin
     # move everything back 2 units
     Translate 0 0 2
-    Color [ 1 0 0 ]
+    Bxdf "PxrDiffuse" "diffuse" "color diffuseColor" [1 0 0]
+    # Color [ 1 0 0 ] seems to be depricated
 
     TransformBegin
         Translate -1 0 0
