@@ -1,0 +1,8 @@
+# Starting the rib file for my renderman project
+Display "Speaker" "it" "rgba"
+Projection "perspective"
+
+WorldBegin
+    Translate 0 0 2
+    Cube -0.5 0.5 -0.5 0.5 -0.5 0.5
+WorldEnd

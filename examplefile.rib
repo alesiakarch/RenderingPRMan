@@ -1,0 +1,41 @@
+# RenderMan-compatible RIB file
+
+Display "it" "it" "rgba"
+Format 512 512 1
+PixelVariance 0.05  # Adjusted to reduce noise in the image
+Integrator "PxrPathTracer" "integrator"
+
+Hider "raytrace" "int incremental" [1]
+
+# Camera Setup
+Projection "perspective" "fov" [45]
+Translate 0 0 5
+Rotate -20 1 0 0
+Rotate 45 0 1 0
+
+WorldBegin
+
+    # Lighting (RIS-style)
+    AttributeBegin
+        Attribute "identifier" "string name" ["sunLight"]
+        Light "PxrDistantLight" "sunLight"
+            "float intensity" [2.0]
+            "color lightColor" [1 1 1]
+    AttributeEnd
+
+    # Ground Plane (using PxrDiffuse shader)
+    AttributeBegin
+        Bxdf "PxrDiffuse" "floor_shader" "color diffuseColor" [0.8 0.8 0.8]
+        Translate 0 -1 0
+        Scale 5 0.1 5
+        Sphere 1 -1 1 360
+    AttributeEnd
+
+    # Sphere as placeholder for teapot (using PxrDiffuse shader)
+    AttributeBegin
+        Bxdf "PxrDiffuse" "shader1" "color diffuseColor" [1 0 0]  # Red sphere
+        Translate 0 0 0
+        Sphere 1 -1 1 360
+    AttributeEnd
+
+WorldEnd

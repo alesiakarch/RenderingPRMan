@@ -1,0 +1,24 @@
+#codeCyl.rib
+Display "codeCyl.tiff" "it" "rgba"
+Projection "perspective"
+
+WorldBegin
+Rotate -90 1 0 0 
+Translate 0 -8 0
+
+TransformBegin
+    Translate -3 0 -2
+    Cone 5 2 360
+TransformEnd
+
+TransformBegin
+    Translate 3 0 0
+    Cylinder 2 -3 3 360
+TransformEnd
+
+TransformBegin
+    Translate 0 0 2
+    Disk 0 10 360
+TransformEnd
+
+WorldEnd 
