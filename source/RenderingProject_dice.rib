@@ -1,0 +1,146 @@
+# Starting the rib file for my renderman project
+Display "Dice" "it" "rgba"
+Format 1920 1080 1.0
+Projection "perspective" "fov" [20]
+
+WorldBegin
+       
+    # Geometry: Tetrahedron (D4)
+    Declare "D4" "string"
+    ObjectBegin "D4"
+
+        # Face ABC
+        Polygon "P" [
+            -0.5     0.0   -0.288675
+             0.5     0.0   -0.288675
+             0.0     0.0    0.57735
+        ]
+
+        # Face ABD
+        Polygon "P" [
+            -0.5     0.0   -0.288675
+             0.5     0.0   -0.288675
+             0.0     0.8165  0.0
+        ]
+
+        # Face ACD
+        Polygon "P" [
+        -0.5     0.0   -0.288675
+            0.0     0.0    0.57735
+            0.0     0.8165  0.0
+        ]
+
+        # Face BCD
+        Polygon "P" [
+            0.5     0.0   -0.288675
+            0.0     0.0    0.57735
+            0.0     0.8165  0.0
+        ]
+
+    ObjectEnd
+
+    # Geometry: Cube (D6) 
+    Declare "D6" "string"
+    ObjectBegin "D6"
+        Patch "bilinear" "P" [-0.5 -0.5 0.5 -0.5 0.5 0.5 0.5 -0.5 0.5 0.5 0.5 0.5]
+        Patch "bilinear" "P" [-0.5 -0.5 -0.5 -0.5 0.5 -0.5 0.5 -0.5 -0.5 0.5 0.5 -0.5]
+        Patch "bilinear" "P" [-0.5 -0.5 -0.5 -0.5 0.5 -0.5 -0.5 -0.5 0.5 -0.5 0.5 0.5]
+        Patch "bilinear" "P" [0.5 -0.5 -0.5 0.5 0.5 -0.5 0.5 -0.5 0.5 0.5 0.5 0.5]
+        Patch "bilinear" "P" [0.5 -0.5 0.5 0.5 -0.5 -0.5 -0.5 -0.5 0.5 -0.5 -0.5 -0.5]
+        Patch "bilinear" "P" [0.5 0.5 0.5 0.5 0.5 -0.5 -0.5 0.5 0.5 -0.5 0.5 -0.5]
+    ObjectEnd
+
+    Declare "D8" "string"
+    ObjectBegin "D8"
+        # Face ABCD
+        Polygon "P" [
+            -0.5    0.0   -0.5
+             0.5    0.0   -0.5
+             0.5    0.0    0.5
+            -0.5    0.0    0.5
+        ]
+
+        # Face ABE
+        Polygon "P" [
+            -0.5    0.0   -0.5
+             0.5    0.0   -0.5
+             0.0    1.0   0.0
+        ]
+
+        # Face BCE
+        Polygon "P" [
+            0.5    0.0   -0.5
+            0.5    0.0    0.5
+            0.0    1.0    0.0
+        ]
+
+        # Face CDE
+        Polygon "P" [
+             0.5    0.0    0.5
+            -0.5    0.0    0.5
+             0.0    1.0    0.0
+        ]
+
+        # # Face DAE
+        Polygon "P" [
+            -0.5    0.0    0.5
+            -0.5    0.0   -0.5
+             0.0    1.0    0.0
+        ]
+        # Face ABF
+        Polygon "P" [
+            -0.5     0.0   -0.5
+             0.5     0.0   -0.5
+             0.0    -1.0   0.0
+        ]
+
+        # Face BCF
+        Polygon "P" [
+            0.5     0.0   -0.5
+            0.5     0.0    0.5
+            0.0    -1.0    0.0
+        ]
+
+        # Face CDF
+        Polygon "P" [
+             0.5     0.0    0.5
+            -0.5     0.0    0.5
+             0.0    -1.0    0.0
+        ]
+
+        # # Face DAF
+        Polygon "P" [
+            -0.5     0.0    0.5
+            -0.5     0.0   -0.5
+             0.0    -1.0    0.0
+        ]
+
+    ObjectEnd
+
+    Translate 0 0 7
+    # TransformBegin
+    #     Rotate 45 0 1 0
+    #     Bxdf "PxrDiffuse" "diffuse" "color diffuseColor" [0.1 0.8 0.1]
+    #     ObjectInstance "D6"
+    # TransformEnd
+
+    # TransformBegin
+    #     Rotate 45 0 1 0
+    #     #Scale 0.25 0.25 0.25
+    #     Bxdf "PxrDiffuse" "diffuse" "color diffuseColor" [0.8 0.1 0.1]
+    #     ObjectInstance "D4"
+    #TransformEnd
+    
+    #Rotate 90 1 0 0
+    #ReadArchive "models/d20.rib"
+
+    TransformBegin
+        Translate 1 0 0
+        Rotate 45 0 1 0
+        #Scale 0.25 0.25 0.25
+        Bxdf "PxrDiffuse" "diffuse" "color diffuseColor" [0.6 0.2 0.2]
+        ObjectInstance "D8"
+    TransformEnd
+   
+
+WorldEnd
