@@ -8,7 +8,7 @@ ri.Option("rib", {"string asciistyle": "indented"})
 filename = "D10.rib"
 # this is the begining of the rib archive generation we can only
 # make RI calls after this function else we get a core dump
-ri.Begin("__render")
+ri.Begin("d10.rib")
 
 # now we add the display element using the usual elements
 # FILENAME DISPLAY Type Output format
@@ -61,3 +61,5 @@ while j < num_faces:
     j += 2  # Skip ahead by 2 to avoid reusing same points
 
 ri.WorldEnd()
+
+ri.End()  # End the rib archive
