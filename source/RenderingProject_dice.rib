@@ -4,14 +4,17 @@ Format 1920 1080 1.0
 Projection "perspective" "fov" [20]
 Translate 0 0 7
 
+
 WorldBegin
-    # Loading the dice set
+   # Loading the dice set
     ReadArchive "models/D4.rib"
     ReadArchive "models/D6.rib"
     ReadArchive "models/D8.rib"
     ReadArchive "models/D10.rib"
     ReadArchive "models/D12.rib"
     ReadArchive "models/D20.rib"
+
+    Light "PxrDomeLight" "theLight" "float exposure" [0] "string lightColorMap" ["wrestling_gym_4k.tx"]
     
     # Create instances of the dice
     #ObjectInstance "D4"
