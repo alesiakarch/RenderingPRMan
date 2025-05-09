@@ -1,4 +1,7 @@
 # Starting the rib file for my renderman project
+#Option "searchpath" "shader" ["../shaders:&"]
+#SearchPath "shader" "."
+
 Display "Dice" "it" "rgba"
 Format 1920 1080 1.0
 Projection "perspective" "fov" [20]
@@ -7,22 +10,59 @@ Translate 0 0 7
 
 WorldBegin
    # Loading the dice set
-    ReadArchive "models/D4.rib"
-    ReadArchive "models/D6.rib"
-    ReadArchive "models/D8.rib"
-    ReadArchive "models/D10.rib"
-    ReadArchive "models/D12.rib"
-    ReadArchive "models/D20.rib"
+    # ReadArchive "models/D4.rib"
+    # ReadArchive "models/D6.rib"
+    # ReadArchive "models/D8.rib"
+    # ReadArchive "models/D10.rib"
+    # ReadArchive "models/D12.rib"
+    #ReadArchive "../models/D20.rib"
+    
 
-    Light "PxrDomeLight" "theLight" "float exposure" [0] "string lightColorMap" ["wrestling_gym_4k.tx"]
+    Light "PxrDomeLight" "theLight" "float exposure" [0] "string lightColorMap" ["../wrestling_gym_4k.tx"]
     
     # Create instances of the dice
     #ObjectInstance "D4"
     #ObjectInstance "D6"
     #ObjectInstance "D8"
-    ObjectInstance "D10"
+    #ObjectInstance "D10"
     #ObjectInstance "D12"
-    #ObjectInstance "D20"
+    AttributeBegin
+        Translate 0 0 5
+        Rotate 65 0 1 0
+        Rotate 15 1 0 0
+ 
+        # Displacement
+        Attribute "displacementbound" "sphere" [0.01] "coordinatesystem" ["object"]
+        
+        # Pattern "bevel" "first_disp" "float bevelAmount" [0.15] "float smoothFactor" [0.2]
+		# Displace "PxrDisplace" "myDisp"
+		# 	"reference float dispScalar" [ "first_disp:resultF" ]
+
+        Pattern "bevel" "edgeBevel"
+            "float scale" [5.5]
+
+        Displace "PxrDisplace" "myDisplace"
+            "float dispAmount" [1.0]
+            "reference float dispScalar" ["edgeBevel:resultF"]
+
+
+        # Pattern "my_first_disp" "first_disp"
+		# Displace "PxrDisplace" "myDisp"
+		# 	"float dispAmount" [ 10.0 ]
+		# 	"reference float dispScalar" [ "first_disp:resultF" ]
+
+        # Colour shader
+        Pattern  "show_uvs" "uv_check"   
+
+        Bxdf "PxrDisney" "for_d20" "reference color baseColor" ["uv_check:Cout"]
+        #Bxdf  "PxrDiffuse" "diffuse_d20" "color diffuseColor" [0.5 0.4 0.1]
+        
+        #Sphere 1 -1 1 360
+
+        #ObjectInstance "D20"
+        ReadArchive "../models/D20_subdiv.rib"
+
+    AttributeEnd
 
 
 

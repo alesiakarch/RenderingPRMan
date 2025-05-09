@@ -1,0 +1,14 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: 
+shader show_uvs
+oparam	color	Cout	0 0 0		%read{2147483647,-1} %write{0,0}
+global	float	u	%read{0,0} %write{2147483647,-1}
+global	float	v	%read{0,0} %write{2147483647,-1}
+const	string	$const1	"rgb"		%read{0,0} %write{2147483647,-1}
+const	float	$const3	0		%read{0,0} %write{2147483647,-1}
+code ___main___
+# ../shaders/uv_color.osl:5
+#     Cout = color("rgb", u, v, 0); // Red = U, Green = V
+	color		Cout $const1 u v $const3 	%filename{"../shaders/uv_color.osl"} %line{5} %argrw{"wrrrr"}
+	end

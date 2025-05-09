@@ -1,0 +1,31 @@
+shader my_first_disp (
+output	float resultF=0,
+output float core=0
+)
+{
+    
+    // Get the position of the current point
+    point Ptemp = P;
+
+    // Use a procedural pattern (Perlin noise) to displace
+    float my_noise = noise("perlin", Ptemp * 0.3); // Scale the noise for subtle displacement
+
+    // Modify the global position P directly
+    resultF += displacementAmount * my_noise * normalize(N);
+    // float repeatCount=5;
+    // float s=mod(repeatCount*u,1);
+    // float t=mod(repeatCount*v,1);
+    // point centre=point (0.5,0.5,0);
+    // point here=point (s,t,0);
+    // float dist=distance(centre,here);
+    // float radius=0.1+(float) noise("cell",repeatCount*u,repeatCount*v)*0.15;
+    // float fuzz=radius*0.9;
+    // float inDisk=1-smoothstep(radius-fuzz,radius+fuzz,dist);
+    // resultF=inDisk*0.01;
+    // core=1-inDisk;
+
+
+    //resultF=noise("perlin",P*5)*0.1;
+    //resultF+=noise("perlin",P*10)*0.1/2;
+    //resultF+=noise("perlin",P*21)*0.1/4;
+}

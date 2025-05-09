@@ -63,19 +63,19 @@ faces = [
     [6, 10, 8],
     [7, 9, 11]
 ]
-ri.Begin("models/d20.rib")
+ri.Begin("../models/D20.rib")
 
-
-#ri.Bxdf("PxrDiffuse", "diffuse", {"color diffuseColor": [1.0, 0.0, 1.0]})
-ri.Scale(0.5, 0.5, 0.5)  # Scale the object down
-ri.Rotate(20, 0, 1, 0)  # Rotate the object to face the camera
 for tri in faces:
     points = []
+     # set the UV coordinates for the vertices
+    st = [ 0.0, 0.0, 1.0, 0.0, 0.5, 1.0  ]
     for i in tri:
         points.extend(flatten(vertices[i]))  # Get the corresponding vertices
+
+   
     
-    ri.Bxdf("PxrDiffuse", "diffuse", {"color diffuseColor": [random.random(), random.random(), random.random()]})
-    ri.Polygon({"P": points})  # Create the polygon with flattened points
+    #ri.Bxdf("PxrDiffuse", "diffuse", {"color diffuseColor": [random.random(), random.random(), random.random()]})
+    ri.Polygon({"P": points, "st": st})  # Create the polygon with flattened points
 
 
 ri.End()  # End the rib archive
