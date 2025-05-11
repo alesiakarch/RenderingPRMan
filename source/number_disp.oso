@@ -1,0 +1,19 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: 
+shader number_disp
+param	string	disp_map	""		%read{0,2} %write{2147483647,-1}
+oparam	float	resultF	0		%read{2147483647,-1} %write{2,2}
+global	float	u	%read{2,2} %write{2147483647,-1} %derivs
+global	float	v	%read{2,2} %write{2147483647,-1} %derivs
+const	string	$const1	""		%read{0,0} %write{2147483647,-1}
+temp	int	$tmp1	%read{1,1} %write{0,0}
+code ___main___
+# ../shaders/bevel_displacement.osl:28
+#     if (disp_map != "")
+	neq		$tmp1 disp_map $const1 	%filename{"../shaders/bevel_displacement.osl"} %line{28} %argrw{"wrr"}
+	if		$tmp1 3 3 	%argrw{"r"}
+# ../shaders/bevel_displacement.osl:29
+#         resultF = texture(disp_map, u, v);
+	texture		resultF disp_map u v 	%line{29} %argrw{"wrrr"} %argderivs{2,3}
+	end

@@ -15,7 +15,7 @@ WorldBegin
     # ReadArchive "models/D8.rib"
     # ReadArchive "models/D10.rib"
     # ReadArchive "models/D12.rib"
-    #ReadArchive "../models/D20.rib"
+    ReadArchive "../models/D20.rib"
     
 
     Light "PxrDomeLight" "theLight" "float exposure" [0] "string lightColorMap" ["../wrestling_gym_4k.tx"]
@@ -32,19 +32,26 @@ WorldBegin
         Rotate 15 1 0 0
  
         # Displacement
-        Attribute "displacementbound" "sphere" [0.01] "coordinatesystem" ["object"]
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
         
         # Pattern "bevel" "first_disp" "float bevelAmount" [0.15] "float smoothFactor" [0.2]
 		# Displace "PxrDisplace" "myDisp"
 		# 	"reference float dispScalar" [ "first_disp:resultF" ]
 
-        Pattern "bevel" "edgeBevel"
-            "float scale" [5.5]
+        # Pattern "bevel" "edgeBevel"
+        #     "float scale" [5.5]
 
-        Displace "PxrDisplace" "myDisplace"
-            "float dispAmount" [1.0]
-            "reference float dispScalar" ["edgeBevel:resultF"]
+        # Displace "PxrDisplace" "myDisplace"
+        #     "float dispAmount" [1.0]
+        #     "reference float dispScalar" ["edgeBevel:resultF"]
 
+        # number displacement
+        Pattern "number_disp" "num_disp_pat" "string disp_map" ["../textures/number_1.tx"]
+
+        Displace "PxrDisplace" "numberDisp"
+            "reference float dispScalar" ["num_disp_pat:resultF"]
+            "float dispAmount" [-0.02]
+            
 
         # Pattern "my_first_disp" "first_disp"
 		# Displace "PxrDisplace" "myDisp"
