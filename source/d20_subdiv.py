@@ -1,93 +1,3 @@
-# #!/usr/bin/env prman.py
-# import prman
-# import math
-
-# ri = prman.Ri()
-# ri.Option("rib", {"string asciistyle": "indented"})
-
-# # Output and camera
-# ri.Display("D20.exr", "it", "rgba")
-# ri.Format(720, 575, 1)
-# ri.Projection(ri.PERSPECTIVE, {ri.FOV: 50})
-# ri.Translate(0, 0, 5)
-
-# # Golden ratio for d20 geometry
-# phi = (1 + math.sqrt(5)) / 2
-
-# # Unique vertex positions
-# vertices = [
-#     (0,  1,  phi), (0, -1,  phi), (0,  1, -phi), (0, -1, -phi),
-#     (1,  phi,  0), (-1,  phi, 0), (1, -phi, 0), (-1, -phi, 0),
-#     (phi, 0,  1), (-phi, 0, 1), (phi, 0, -1), (-phi, 0, -1)
-# ]
-
-# # Triangle faces (indexing into vertices)
-# faces = [
-#     [0, 1, 8], [0, 8, 4], [0, 4, 5], [0, 5, 9], [0, 9, 1],
-#     [1, 6, 8], [1, 9, 7], [1, 7, 6],
-#     [2, 3, 11], [2, 10, 3], [2, 5, 4], [2, 4, 10], [2, 11, 5],
-#     [3, 6, 7], [3, 10, 6], [3, 7, 11],
-#     [4, 8, 10], [5, 11, 9], [6, 10, 8], [7, 9, 11]
-# ]
-
-# # Convert vertex tuples to flat list
-# flat_verts = [coord for v in vertices for coord in v]
-
-# # Each triangle has 3 vertices
-# nverts = [3] * len(faces)
-
-# # Flatten face indices
-# verts_indices = [i for face in faces for i in face]
-
-# # Dummy UVs per vertex
-# st = []
-# for _ in vertices:
-#     st.extend([0.0, 0.0])  # You can later compute proper UVs if needed
-
-# # Begin writing the object
-# ri.Begin("../models/D20_subdiv.rib")
-
-# ri.Attribute("displacementbound", {"float sphere": 0.5, "string coordinatesystem": "object"})
-
-# # Optional: apply a transform so the object is positioned well
-# ri.TransformBegin()
-# ri.Scale(0.5, 0.5, 0.5)
-# ri.Rotate(20, 0, 1, 0)
-
-# # Flatten the list of vertices
-# points = [coord for v in vertices for coord in v]
-
-# # Create placeholder UVs (same layout repeated, not real unwrap)
-# st = []
-# for _ in range(len(vertices)):
-#     st.extend([0.5, 0.5])  # fake UVs for now
-
-# # Each face has 3 vertices
-# nverts = [3] * len(faces)
-# verts = [i for face in faces for i in face]
-
-# # ri.Attribute("subdivision", {
-# #     "string scheme": "bilinear",
-# #     "int dice:roundoff": [0],
-# #     "float dice:triangle": [0.1]  # finer subdivs = more geometry
-# # })
-# nfaces = 20
-# # Build facevarying face_id (3 entries per face)
-# face_ids = []
-# for i in range(nfaces):
-#     face_ids.extend([float(i)] * 3)  # One per corner of triangle
-# # Now create the subdiv mesh
-# ri.SubdivisionMesh(
-#     "bilinear",           # No smoothing
-#     nverts,
-#     verts,
-#     [], [], [], [],
-#     {"P": points, "st": st, "facevarying float face_id": face_ids}
-# )
-
-# ri.TransformEnd()
-# ri.End()
-
 #!/usr/bin/env prman.py
 import prman
 import math
@@ -96,7 +6,6 @@ ri = prman.Ri()
 ri.Option("rib", {"string asciistyle": "indented"})
 
 # Output and camera
-ri.Begin("../models/D20_subdiv.rib")
 ri.Display("D20.exr", "it", "rgba")
 ri.Format(720, 575, 1)
 ri.Projection(ri.PERSPECTIVE, {ri.FOV: 50})
@@ -121,46 +30,217 @@ faces = [
     [4, 8, 10], [5, 11, 9], [6, 10, 8], [7, 9, 11]
 ]
 
-# Convert triangles into fake quads by duplicating the last vertex
-# So each triangle becomes a quad: v0, v1, v2, v2
-quad_faces = []
-for face in faces:
-    v0, v1, v2 = face
-    quad_faces.append([v0, v1, v2, v2])
+# Convert vertex tuples to flat list
+flat_verts = [coord for v in vertices for coord in v]
 
-# Flatten vertex list and UVs
-points = [coord for v in vertices for coord in v]
-st = [0.5, 0.5] * len(vertices)
+# Each triangle has 3 vertices
+nverts = [3] * len(faces)
 
-# Build nverts and verts
-nverts = [4] * len(quad_faces)
-verts = [i for face in quad_faces for i in face]
+# Flatten face indices
+verts_indices = [i for face in faces for i in face]
 
-# Create facevarying face_id (4 per face for quads)
-face_ids = []
-for i in range(len(quad_faces)):
-    face_ids.extend([float(i)] * 4)
+# Dummy UVs per vertex
+st = []
+for _ in vertices:
+    st.extend([0.0, 0.0])  # You can later compute proper UVs if needed
 
-# Displacement bound (adjust as needed)
-ri.Attribute("displacementbound", {"float sphere": 0.5, "string coordinatAesystem": "object"})
+# Begin writing the object
+ri.Begin("../models/D20_subdiv.rib")
 
-# Optional transform
+ri.Attribute("displacementbound", {"float sphere": 0.5, "string coordinatesystem": "object"})
+
+# Optional: apply a transform so the object is positioned well
 ri.TransformBegin()
 ri.Scale(0.5, 0.5, 0.5)
 ri.Rotate(20, 0, 1, 0)
 
-# Write the SubdivisionMesh
+# Flatten the list of vertices
+points = [coord for v in vertices for coord in v]
+
+# Create placeholder UVs (same layout repeated, not real unwrap)
+st = []
+for _ in range(len(vertices)):
+    st.extend([0.5, 0.5])  # fake UVs for now
+
+# Each face has 3 vertices
+nverts = [3] * len(faces)
+verts = [i for face in faces for i in face]
+
+# ri.Attribute("subdivision", {
+#     "string scheme": "bilinear",
+#     "int dice:roundoff": [0],
+#     "float dice:triangle": [0.1]  # finer subdivs = more geometry
+# })
+nfaces = 20
+# Build facevarying face_id (3 entries per face)
+face_ids = []
+for i in range(nfaces):
+    face_ids.extend([float(i)] * 3)  # One per corner of triangle
+
+# Step 1: Build a set of unique undirected edges
+# edges = set()  # Set ensures uniqueness of edges
+# for face in faces:
+#     for i in range(len(face)):
+#         v0 = face[i]
+#         v1 = face[(i + 1) % len(face)]  # Wraps around to close the loop
+#         edge = tuple(sorted([v0, v1]))  # Sort to ensure undirected edges
+#         edges.add(edge)
+
+# Step 2: Convert edges into crease data
+intargs = []
+nargs = []
+floatargs = []
+
+# Step 2: Convert the edges into a flat list of integers (intargs)
+edges = set()  # Use a set to store unique edges
+for face in faces:
+    v0, v1, v2 = face
+    # Create edges for each triangle, and sort the vertex pairs to ensure uniqueness
+    edges.add(tuple(sorted([v0, v1])))  # Edge between v0 and v1
+    edges.add(tuple(sorted([v1, v2])))  # Edge between v1 and v2
+    edges.add(tuple(sorted([v2, v0])))  # Edge between v2 and v0
+
+print(f"{edges}")
+#intargs = list(edges)
+# for edge in edges:
+#     # Edge already sorted, just add to intargs
+#     intargs.extend(edge)  # Add the vertices of the edge
+# for face in faces:
+#     v0, v1, v2 = face
+#     intargs.extend([v0, v1, v1, v2, v2, v0])  # Create edges for each triangle
+
+#print(edges)
+
+# Convert edges to flattened list
+intargs = [v for edge in edges for v in edge] 
+# intargs = [ 3, 7,
+#             3, 10,
+#             0, 5,
+#             1, 6,
+#             0, 8,
+#             2, 5,
+#             2, 11,
+#             1, 9,
+#             9, 11,
+#             6, 8,
+#             4, 5,
+#             4, 8,
+#             3, 6,
+#             5, 9,
+#             0, 1,
+#             2, 4,
+#             0, 4,
+#             2, 10,
+#             1, 8,
+#             7, 9,
+#             6, 7,
+#             6, 10,
+#             3, 11,
+#             4, 10,
+#             5, 11,
+#             0, 9,
+#             8, 10,
+#             2, 3,
+#             1, 7,
+#             7, 11,
+#             ]
+nargs = [2] * len(edges) * 2     # ONE entry: total number of ints
+floatargs = [10.0] * 60
+
+print("nargs:", nargs)
+print("len(nargs):", len(nargs))
+print("len(intargs):", len(intargs))
+print("intargs:", intargs)
+print("len(floatargs):", len(floatargs))
+
+# Now create the subdiv mesh
 ri.SubdivisionMesh(
-    "catmull-clark",
+    "loop",           # No smoothing
     nverts,
     verts,
-    [], [], [], [],
-    {
-        "P": points,
-        "st": st,
-        "facevarying float face_id": face_ids
-    }
+    [ri.CREASE] * len(edges),
+    nargs,
+    intargs,
+    floatargs,
+    {"P": points, "st": st }#"facevarying float face_id": face_ids
 )
 
 ri.TransformEnd()
 ri.End()
+
+# #!/usr/bin/env prman.py
+# import prman
+# import math
+
+# ri = prman.Ri()
+# ri.Option("rib", {"string asciistyle": "indented"})
+
+# # Output and camera
+# ri.Begin("../models/D20_subdiv.rib")
+# ri.Display("D20.exr", "it", "rgba")
+# ri.Format(720, 575, 1)
+# ri.Projection(ri.PERSPECTIVE, {ri.FOV: 50})
+# ri.Translate(0, 0, 5)
+
+# # Golden ratio for d20 geometry
+# phi = (1 + math.sqrt(5)) / 2
+
+# # Unique vertex positions
+# vertices = [
+#     (0,  1,  phi), (0, -1,  phi), (0,  1, -phi), (0, -1, -phi),
+#     (1,  phi,  0), (-1,  phi, 0), (1, -phi, 0), (-1, -phi, 0),
+#     (phi, 0,  1), (-phi, 0, 1), (phi, 0, -1), (-phi, 0, -1)
+# ]
+
+# # Triangle faces (indexing into vertices)
+# faces = [
+#     [0, 1, 8], [0, 8, 4], [0, 4, 5], [0, 5, 9], [0, 9, 1],
+#     [1, 6, 8], [1, 9, 7], [1, 7, 6],
+#     [2, 3, 11], [2, 10, 3], [2, 5, 4], [2, 4, 10], [2, 11, 5],
+#     [3, 6, 7], [3, 10, 6], [3, 7, 11],
+#     [4, 8, 10], [5, 11, 9], [6, 10, 8], [7, 9, 11]
+# ]
+
+# # Convert triangles into fake quads by duplicating the last vertex
+# # So each triangle becomes a quad: v0, v1, v2, v2
+# quad_faces = []
+# for face in faces:
+#     v0, v1, v2 = face
+#     quad_faces.append([v0, v1, v2, v2])
+
+# # Flatten vertex list and UVs
+# points = [coord for v in vertices for coord in v]
+# st = [0.5, 0.5] * len(vertices)
+
+# # Build nverts and verts
+# nverts = [4] * len(quad_faces)
+# verts = [i for face in quad_faces for i in face]
+
+# # Create facevarying face_id (4 per face for quads)
+# face_ids = []
+# for i in range(len(quad_faces)):
+#     face_ids.extend([float(i)] * 4)
+
+# # Displacement bound (adjust as needed)
+# ri.Attribute("displacementbound", {"float sphere": 0.5, "string coordinatAesystem": "object"})
+
+# # Optional transform
+# ri.TransformBegin()
+# ri.Scale(0.5, 0.5, 0.5)
+# ri.Rotate(20, 0, 1, 0)
+
+# # Write the SubdivisionMesh
+# ri.SubdivisionMesh(
+#     "catmull-clark",
+#     nverts,
+#     verts,
+#     [], [], [], [],
+#     {
+#         "P": points,
+#         "st": st,
+#         "facevarying float face_id": face_ids
+#     }
+# )
+
+# ri.TransformEnd()
+# ri.End()
