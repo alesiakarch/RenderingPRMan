@@ -18,7 +18,15 @@ WorldBegin
     #ReadArchive "../models/D20.rib"
     
 
-    Light "PxrDomeLight" "theLight" "float exposure" [0] "string lightColorMap" ["../wrestling_gym_4k.tx"]
+    Light "PxrDomeLight" "theLight" "float exposure" [0] 
+          "string lightColorMap" ["../wrestling_gym_4k.tx"] 
+          "int enableShadows" [1]
+          "float intensity" [1.0]  # Adjust as needed
+
+    # Light "PxrDistantLight" "test_light"
+    #       "color lightColor" [1 1 1]
+    #       "float intensity" [2.0]
+    #       "vector direction" [0 -1 -1]
     
     # Create instances of the dice
     #ObjectInstance "D4"
@@ -36,7 +44,7 @@ WorldBegin
         #Rotate 15 1 0 0
  
         # Displacement
-        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["world"]
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
         
         # Pattern "bevel" "first_disp" "float bevelAmount" [0.15] "float smoothFactor" [0.2]
 		# Displace "PxrDisplace" "myDisp"
@@ -62,13 +70,13 @@ WorldBegin
 
         Displace "PxrDisplace" "numberDisp"
             "reference float dispScalar" ["dispPattern:resultF"]
-            "float dispAmount" [-0.02]
+            "float dispAmount" [-0.2]
 
         # Colour shader
         Pattern  "show_uvs" "uv_check"   
 
-        Bxdf "PxrDisney" "for_d20" "reference color baseColor" ["uv_check:Cout"]
-        #Bxdf  "PxrDiffuse" "diffuse_d20" "color diffuseColor" [0.5 0.4 0.1]
+        #Bxdf "PxrDisney" "for_d20" "reference color baseColor" ["uv_check:Cout"]
+        Bxdf  "PxrDiffuse" "diffuse_d20" "color diffuseColor" [0.2 0.6 0.2]
         
         #Sphere 1 -1 1 360
 
