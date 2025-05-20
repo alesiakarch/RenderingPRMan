@@ -1,0 +1,15 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: 
+shader tabletop
+param	string	tex_path	""		%read{0,0} %write{2147483647,-1}
+oparam	color	Cout	0 0 0		%read{2147483647,-1} %write{0,0}
+global	float	u	%read{0,0} %write{2147483647,-1} %derivs
+global	float	v	%read{0,0} %write{2147483647,-1} %derivs
+const	string	$const1	"wrap"		%read{0,0} %write{2147483647,-1}
+const	string	$const2	"periodic"		%read{0,0} %write{2147483647,-1}
+code ___main___
+# ../shaders/tabletop.osl:7
+#     Cout = texture(tex_path, v, u, "wrap", "periodic");
+	texture		Cout tex_path v u $const1 $const2 	%filename{"../shaders/tabletop.osl"} %line{7} %argrw{"wrrrrr"} %argderivs{2,3}
+	end

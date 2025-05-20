@@ -9,13 +9,13 @@ Translate 0 0 7
 
 
 WorldBegin
-   # Loading the dice set
+   # Loading the dice set 
     # ReadArchive "models/D4.rib"
     # ReadArchive "models/D6.rib"
     # ReadArchive "models/D8.rib"
     # ReadArchive "models/D10.rib"
     # ReadArchive "models/D12.rib"
-    ReadArchive "../models/D20.rib"
+    #ReadArchive "../models/D20.rib"
     
 
     Light "PxrDomeLight" "theLight" "float exposure" [0] "string lightColorMap" ["../wrestling_gym_4k.tx"]
@@ -27,9 +27,13 @@ WorldBegin
     #ObjectInstance "D10"
     #ObjectInstance "D12"
     AttributeBegin
-        #Translate 0 0 5
+        Translate 0.7 -0.1 -2
+        #Rotate -10 0 0 1
+        Rotate 10 0 1 0
+        #Rotate 20 1 0 0
+        Scale 0.5 0.5 0.5
         #Rotate 65 0 1 0
-        ##Rotate 15 1 0 0
+        #Rotate 15 1 0 0
  
         # Displacement
         Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["world"]
@@ -59,11 +63,6 @@ WorldBegin
         Displace "PxrDisplace" "numberDisp"
             "reference float dispScalar" ["dispPattern:resultF"]
             "float dispAmount" [-0.02]
-            
-        # Pattern "my_first_disp" "first_disp"
-		# Displace "PxrDisplace" "myDisp"
-		# 	"float dispAmount" [ 10.0 ]
-		# 	"reference float dispScalar" [ "first_disp:resultF" ]
 
         # Colour shader
         Pattern  "show_uvs" "uv_check"   
@@ -78,6 +77,19 @@ WorldBegin
 
     AttributeEnd
 
+    # Table
+    AttributeBegin
+        Translate 0 0 -2
+        Rotate 90 1 0 0 
+        Scale 6 8 1
 
+        Pattern "tabletop" "tabletop_tex"
+                "string tex_path" ["../textures/wood.tx"]
+                # "float tile_u" [2.0]
+                # "float tile_v" [2.0]
+        Bxdf "PxrDisney" "tabletop_color" "reference color baseColor" ["tabletop_tex:Cout"]
+        Patch "bilinear" "P" [-0.5 -0.5 0.5 -0.5 0.5 0.5 0.5 -0.5 0.5 0.5 0.5 0.5]
+
+    AttributeEnd
 
 WorldEnd
