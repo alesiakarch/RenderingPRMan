@@ -27,12 +27,12 @@ WorldBegin
     #ObjectInstance "D10"
     #ObjectInstance "D12"
     AttributeBegin
-        Translate 0 0 5
-        Rotate 65 0 1 0
-        Rotate 15 1 0 0
+        #Translate 0 0 5
+        #Rotate 65 0 1 0
+        ##Rotate 15 1 0 0
  
         # Displacement
-        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["world"]
         
         # Pattern "bevel" "first_disp" "float bevelAmount" [0.15] "float smoothFactor" [0.2]
 		# Displace "PxrDisplace" "myDisp"
@@ -45,14 +45,21 @@ WorldBegin
         #     "float dispAmount" [1.0]
         #     "reference float dispScalar" ["edgeBevel:resultF"]
 
+        # Pattern "PxrManifold2D" "flipUV"
+        #         "float scaleT" [-1]
+        #         "float offsetT" [1]
         # number displacement
-        Pattern "number_disp" "num_disp_pat" "string disp_map" ["../textures/number_1.tx"]
+        #Pattern "number_disp" "num_disp_pat" "string disp_map" ["../textures/number_12.tx"]  
+
+        # patters for difference numbers
+        Pattern "face_disp" "dispPattern"
+                "string tex_base_path" ["../textures/"]
+                "float scale" [0.05]
 
         Displace "PxrDisplace" "numberDisp"
-            "reference float dispScalar" ["num_disp_pat:resultF"]
+            "reference float dispScalar" ["dispPattern:resultF"]
             "float dispAmount" [-0.02]
             
-
         # Pattern "my_first_disp" "first_disp"
 		# Displace "PxrDisplace" "myDisp"
 		# 	"float dispAmount" [ 10.0 ]

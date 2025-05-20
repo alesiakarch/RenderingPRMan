@@ -1,0 +1,48 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: 
+shader face_disp
+param	string	tex_base_path	""		%read{5,5} %write{2147483647,-1}
+param	float	scale	0.0500000007		%read{9,9} %write{2147483647,-1}
+oparam	float	resultF	0		%read{2147483647,-1} %write{9,9}
+global	float	u	%read{8,8} %write{2147483647,-1} %derivs
+global	float	v	%read{8,8} %write{2147483647,-1} %derivs
+local	int	fid	%read{2,2} %write{0,1}
+local	string	tex_path	%read{8,8} %write{7,7}
+const	int	$const1	1		%read{0,0} %write{2147483647,-1}
+temp	int	$tmp1	%read{2147483647,-1} %write{1,1}
+const	string	$const2	"patch:faceindex"		%read{1,1} %write{2147483647,-1}
+const	string	$const3	"/number_"		%read{5,5} %write{2147483647,-1}
+temp	string	$tmp2	%read{6,6} %write{2,2}
+const	string	$const4	"%d"		%read{2,2} %write{2147483647,-1}
+const	string	$const5	".tx"		%read{7,7} %write{2147483647,-1}
+const	string	$const6	"concat"		%read{3,4} %write{2147483647,-1}
+temp	string	$tmp3	%read{7,7} %write{6,6}
+temp	string	$tmp4	%read{6,6} %write{5,5}
+temp	float	$tmp5	%read{9,9} %write{8,8}
+code ___main___
+# ../shaders/text_per_face.osl:7
+#     int fid = 1;
+	assign		fid $const1 	%filename{"../shaders/text_per_face.osl"} %line{7} %argrw{"wr"}
+# ../shaders/text_per_face.osl:8
+#     getattribute("patch:faceindex", fid);
+	getattribute	$tmp1 $const2 fid 	%line{8} %argrw{"wrw"}
+# ../shaders/text_per_face.osl:10
+#     string tex_path = concat(tex_base_path, "/number_", format("%d", fid), ".tx");
+	format		$tmp2 $const4 fid 	%line{10} %argrw{"wrr"}
+	functioncall	$const6 8 	%argrw{"r"}
+# /opt/pixar/RenderManProServer-26.3/lib/osl/include/stdosl.h:462
+#     return concat(concat(a,b,c), d);
+	functioncall	$const6 7 	%filename{"/opt/pixar/RenderManProServer-26.3/lib/osl/include/stdosl.h"} %line{462} %argrw{"r"}
+# /opt/pixar/RenderManProServer-26.3/lib/osl/include/stdosl.h:459
+#     return concat(concat(a,b), c);
+	concat		$tmp4 tex_base_path $const3 	%line{459} %argrw{"wrr"}
+	concat		$tmp3 $tmp4 $tmp2 	%argrw{"wrr"}
+# /opt/pixar/RenderManProServer-26.3/lib/osl/include/stdosl.h:462
+#     return concat(concat(a,b,c), d);
+	concat		tex_path $tmp3 $const5 	%line{462} %argrw{"wrr"}
+# ../shaders/text_per_face.osl:12
+#     resultF = texture(tex_path, u, v) * scale;
+	texture		$tmp5 tex_path u v 	%filename{"../shaders/text_per_face.osl"} %line{12} %argrw{"wrrr"} %argderivs{2,3}
+	mul		resultF $tmp5 scale 	%argrw{"wrr"}
+	end

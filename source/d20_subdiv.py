@@ -38,6 +38,7 @@ nverts = [3] * len(faces)
 
 # Flatten face indices
 verts_indices = [i for face in faces for i in face]
+print(f"verts_indices: {verts_indices}")
 
 # Begin writing the object
 ri.Begin("../models/D20_subdiv.rib")
@@ -53,22 +54,39 @@ ri.Rotate(20, 0, 1, 0)
 points = [coord for v in vertices for coord in v]
 
 # Create placeholder UVs (same layout repeated, not real unwrap)
+# st = []
+# for vert in vertices:
+#     st.extend([0.0, 1.0]) 
+
 st = []
 for face in faces:
-    st.extend([-1.0, 0.0])
-    st.extend([0.0, 1.0]) 
-    st.extend([1.0, 0.0])   # fake UVs for now
+    st.extend([0.0, 0.0])
+    st.extend([1.0, 0.0]) 
+    st.extend([0.5, 1.0])
+
 
 # Each face has 3 vertices
 nverts = [3] * len(faces)
 verts = [i for face in faces for i in face]
 
 print(f"ST: {st}")
-print(f"len(verts): {len(verts)}")
+print(f"len(vertices): {len(vertices)}")
 print(f"len(st): {len(st)}")
-assert len(st) == len(verts) * 2, "Mismatch between verts and st lengths"
+#assert len(st) == len(vertices) * 2, "Mismatch between verts and st lengths"
 
 
+uvs = []
+for x, y, z in vertices:
+    length = math.sqrt(x*x + y*y + z*z)
+    nx, ny, nz = x / length, y / length, z / length
+
+    u = 0.5 + (math.atan2(nz, nx) / (2 * math.pi))
+    v = 0.5 - (math.asin(ny) / math.pi)
+
+    uvs.extend([u, v])  # Flattened list of floats
+
+print("UVs:", uvs)
+print("Length of UV list:", len(uvs))
 
 nfaces = 20
 # Build facevarying face_id (3 entries per face)
@@ -112,44 +130,14 @@ print(f"{edges}")
 
 # Convert edges to flattened list
 intargs = [v for edge in edges for v in edge] 
-# intargs = [ 3, 7,
-#             3, 10,
-#             0, 5,
-#             1, 6,
-#             0, 8,
-#             2, 5,
-#             2, 11,
-#             1, 9,
-#             9, 11,
-#             6, 8,
-#             4, 5,
-#             4, 8,
-#             3, 6,
-#             5, 9,
-#             0, 1,
-#             2, 4,
-#             0, 4,
-#             2, 10,
-#             1, 8,
-#             7, 9,
-#             6, 7,
-#             6, 10,
-#             3, 11,
-#             4, 10,
-#             5, 11,
-#             0, 9,
-#             8, 10,
-#             2, 3,
-#             1, 7,
-#             7, 11,
-#             ]
+
 nargs = [2] * len(edges) * 2     # ONE entry: total number of ints
 floatargs = [10.0] * 60
 
-print("nargs:", nargs)
+#print("nargs:", nargs)
 print("len(nargs):", len(nargs))
 print("len(intargs):", len(intargs))
-print("intargs:", intargs)
+#print("intargs:", intargs)
 print("len(floatargs):", len(floatargs))
 
 # Now create the subdiv mesh
@@ -161,8 +149,8 @@ ri.SubdivisionMesh(
     nargs,
     intargs,
     floatargs,
-    {"P": points}#, 
-     #"facevarying float st": st }  #"facevarying float face_id": face_ids
+    {"P": points, 
+     "facevarying float[2] st": st }  #"facevarying float face_id": face_ids
 )
 
 ri.TransformEnd()

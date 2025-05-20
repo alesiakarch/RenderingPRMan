@@ -2,18 +2,30 @@ OpenShadingLanguage 1.00
 # Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
 # options: 
 shader number_disp
-param	string	disp_map	""		%read{0,2} %write{2147483647,-1}
-oparam	float	resultF	0		%read{2147483647,-1} %write{2,2}
-global	float	u	%read{2,2} %write{2147483647,-1} %derivs
-global	float	v	%read{2,2} %write{2147483647,-1} %derivs
+param	string	disp_map	""		%read{0,5} %write{2147483647,-1}
+oparam	float	resultF	0		%read{2147483647,-1} %write{5,5}
+global	float	u	%read{5,5} %write{2147483647,-1} %derivs
+global	float	v	%read{3,3} %write{2147483647,-1} %derivs
 const	string	$const1	""		%read{0,0} %write{2147483647,-1}
 temp	int	$tmp1	%read{1,1} %write{0,0}
+temp	float	$tmp2	%read{5,5} %write{4,4} %derivs
+const	float	$const2	0.00999999978		%read{4,4} %write{2147483647,-1}
+const	float	$const3	0.99000001		%read{3,3} %write{2147483647,-1}
+const	string	$const4	"clamp"		%read{2,2} %write{2147483647,-1}
+temp	float	$tmp3	%read{4,4} %write{3,3} %derivs
 code ___main___
 # ../shaders/bevel_displacement.osl:28
 #     if (disp_map != "")
 	neq		$tmp1 disp_map $const1 	%filename{"../shaders/bevel_displacement.osl"} %line{28} %argrw{"wrr"}
-	if		$tmp1 3 3 	%argrw{"r"}
-# ../shaders/bevel_displacement.osl:29
-#         resultF = texture(disp_map, u, v);
-	texture		resultF disp_map u v 	%line{29} %argrw{"wrrr"} %argderivs{2,3}
+	if		$tmp1 6 6 	%argrw{"r"}
+# ../shaders/bevel_displacement.osl:31
+#         resultF = texture(disp_map, u, clamp(v, 0.01, 0.99));
+	functioncall	$const4 5 	%line{31} %argrw{"r"}
+# /opt/pixar/RenderManProServer-26.3/lib/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp3 v $const3 	%filename{"/opt/pixar/RenderManProServer-26.3/lib/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		$tmp2 $tmp3 $const2 	%argrw{"wrr"}
+# ../shaders/bevel_displacement.osl:31
+#         resultF = texture(disp_map, u, clamp(v, 0.01, 0.99));
+	texture		resultF disp_map u $tmp2 	%filename{"../shaders/bevel_displacement.osl"} %line{31} %argrw{"wrrr"} %argderivs{2,3}
 	end

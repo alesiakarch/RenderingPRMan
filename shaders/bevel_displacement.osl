@@ -26,5 +26,9 @@ shader number_disp(
     output float resultF = 0.0)
 {
     if (disp_map != "")
-        resultF = texture(disp_map, u, v);
+        //resultF = texture(disp_map, u, v);
+        //resultF = texture(disp_map, u, 1 - v);
+        resultF = texture(disp_map, u, clamp(v, 0.01, 0.99));
+
+
 }
