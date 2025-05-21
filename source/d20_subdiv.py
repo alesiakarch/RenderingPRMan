@@ -132,7 +132,12 @@ print(f"{edges}")
 intargs = [v for edge in edges for v in edge] 
 
 nargs = [2] * len(edges) * 2     # ONE entry: total number of ints
-floatargs = [10.0] * 60
+floatargs = [5.0] * 60
+#face_ids = list(range(1, 21))  # [0, 1, 2, ..., 19]
+
+facevarying_faceid = []
+for i in list(range(1, 21)):
+    facevarying_faceid.extend([i, i, i])
 
 #print("nargs:", nargs)
 print("len(nargs):", len(nargs))
@@ -150,7 +155,8 @@ ri.SubdivisionMesh(
     intargs,
     floatargs,
     {"P": points, 
-     "facevarying float[2] st": st }  #"facevarying float face_id": face_ids
+     "facevarying float[2] st": st,
+     "facevarying float faceid" : facevarying_faceid}  #"facevarying float face_id": face_ids
 )
 
 ri.TransformEnd()

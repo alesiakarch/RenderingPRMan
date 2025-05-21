@@ -16,12 +16,15 @@ WorldBegin
     # ReadArchive "models/D10.rib"
     # ReadArchive "models/D12.rib"
     #ReadArchive "../models/D20.rib"
-    
 
-    Light "PxrDomeLight" "theLight" "float exposure" [0] 
-          "string lightColorMap" ["../wrestling_gym_4k.tx"] 
-          "int enableShadows" [1]
-          "float intensity" [1.0]  # Adjust as needed
+    AttributeBegin
+        Rotate 5 0 1 0
+        Rotate -45 0 0 1
+        Light "PxrDomeLight" "theLight" "float exposure" [0] 
+            "string lightColorMap" ["../wrestling_gym_4k.tx"] 
+            "int enableShadows" [1]
+            "float intensity" [1.0]  # Adjust as needed
+    AttributeEnd
 
     # Light "PxrDistantLight" "test_light"
     #       "color lightColor" [1 1 1]
@@ -64,8 +67,8 @@ WorldBegin
         #Pattern "number_disp" "num_disp_pat" "string disp_map" ["../textures/number_12.tx"]  
 
         # patters for difference numbers
-        Pattern "face_disp" "dispPattern"
-                "string tex_base_path" ["../textures/"]
+        Pattern "number_per_face" "dispPattern"
+                "string tex_path" ["../textures"]
                 "float scale" [0.05]
 
         Displace "PxrDisplace" "numberDisp"
@@ -76,7 +79,8 @@ WorldBegin
         Pattern  "show_uvs" "uv_check"   
 
         #Bxdf "PxrDisney" "for_d20" "reference color baseColor" ["uv_check:Cout"]
-        Bxdf  "PxrDiffuse" "diffuse_d20" "color diffuseColor" [0.2 0.6 0.2]
+        Bxdf "PxrDisney" "for_d20" "reference color baseColor" [0.2 0.6 0.2]
+        #Bxdf  "PxrDiffuse" "diffuse_d20" "color diffuseColor" [0.2 0.6 0.2]
         
         #Sphere 1 -1 1 360
 
