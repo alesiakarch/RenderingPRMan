@@ -40,46 +40,37 @@ WorldBegin
     AttributeBegin
         Translate 0.7 -0.1 -2
         #Rotate -10 0 0 1
-        Rotate 10 0 1 0
+        Rotate 120 0 1 0
         #Rotate 20 1 0 0
         Scale 0.5 0.5 0.5
         #Rotate 65 0 1 0
         #Rotate 15 1 0 0
- 
+
         # Displacement
         Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
-        
-        # Pattern "bevel" "first_disp" "float bevelAmount" [0.15] "float smoothFactor" [0.2]
-		# Displace "PxrDisplace" "myDisp"
-		# 	"reference float dispScalar" [ "first_disp:resultF" ]
 
-        # Pattern "bevel" "edgeBevel"
-        #     "float scale" [5.5]
-
-        # Displace "PxrDisplace" "myDisplace"
-        #     "float dispAmount" [1.0]
-        #     "reference float dispScalar" ["edgeBevel:resultF"]
-
-        # Pattern "PxrManifold2D" "flipUV"
-        #         "float scaleT" [-1]
-        #         "float offsetT" [1]
-        # number displacement
-        #Pattern "number_disp" "num_disp_pat" "string disp_map" ["../textures/number_12.tx"]  
-
-        # patters for difference numbers
+        # Displacement shader patter to get unique number per face
         Pattern "number_per_face" "dispPattern"
                 "string tex_path" ["../textures"]
-                "float scale" [0.05]
 
+        # Pattern displacement mask
+        Pattern "disp_mask" "dispMask"
+                "reference float dispAmount" ["dispPattern:resultF"]
+   
         Displace "PxrDisplace" "numberDisp"
-            "reference float dispScalar" ["dispPattern:resultF"]
-            "float dispAmount" [-0.2]
+                 "reference float dispScalar" ["dispPattern:resultF"]
+                 "float dispAmount" [-0.04]
 
         # Colour shader
         Pattern  "show_uvs" "uv_check"   
 
-        #Bxdf "PxrDisney" "for_d20" "reference color baseColor" ["uv_check:Cout"]
-        Bxdf "PxrDisney" "for_d20" "reference color baseColor" [0.2 0.6 0.2]
+        # Colour switch shader
+        Pattern "colour_switch" "die_color" 
+                "color ColourA" [0.1 0.0 0.0]
+                "color ColourB" [0.0 1.0 0.0]
+                "reference float mask" ["dispMask:mask"]
+
+        Bxdf "PxrDisney" "for_d20" "reference color baseColor" ["die_color:Cout"]
         #Bxdf  "PxrDiffuse" "diffuse_d20" "color diffuseColor" [0.2 0.6 0.2]
         
         #Sphere 1 -1 1 360

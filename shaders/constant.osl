@@ -1,0 +1,8 @@
+shader constant(
+    float value = 0.0,
+    output float constant_value = 0.0
+
+)
+{
+    constant_value = value;
+}

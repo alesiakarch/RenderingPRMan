@@ -1,7 +1,6 @@
 shader number_per_face(
     string tex_path = "",
     float faceid = 0 [[ int lockgeom = 0 ]],
-    float scale = 0.05,
     output float resultF = 0.0
 )
 {   
@@ -10,6 +9,6 @@ shader number_per_face(
     // use id to pick a texture tile:
     string num_tex_path = concat(tex_path, "/number_", format("%d", fid), ".tx");
 
-    resultF = texture(num_tex_path, u, v) * scale;
+    resultF = texture(num_tex_path, u, v);
     
 }

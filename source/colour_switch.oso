@@ -1,0 +1,13 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: 
+shader colour_switch
+param	color	ColourA	0 0 0		%read{0,0} %write{2147483647,-1}
+param	color	ColourB	0 0 0		%read{0,0} %write{2147483647,-1}
+param	float	mask	0		%read{0,0} %write{2147483647,-1}
+oparam	color	Cout	0 0 0		%read{2147483647,-1} %write{0,0}
+code ___main___
+# ../shaders/colour_switch.osl:10
+#     Cout = mix(ColourA, ColourB, mask);
+	mix		Cout ColourA ColourB mask 	%filename{"../shaders/colour_switch.osl"} %line{10} %argrw{"wrrr"}
+	end
