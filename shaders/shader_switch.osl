@@ -1,0 +1,28 @@
+shader shader_switch(
+    color ColourDie = color(0.0, 0.0, 0.0),
+    color ColourNum = color(0.0, 0.0, 0.0),
+
+    float RoughnessDie = 0,
+    float RoughnessNum = 0,
+
+    float MetalDie = 0,
+    float MetalNum = 0,
+
+    float ClearcoatDie = 0,
+    float ClearcoatNum = 0,
+    float mask = 0.0,
+    output color Cout = 0,
+    output float Roughness = 0,
+    output float Metal = 0,
+    output float Clearcoat = 0
+
+)
+{   
+    float clamped_mask = clamp(mask, 0, 1);
+    Cout = mix(ColourDie, ColourNum, clamped_mask);
+    Roughness = mix(RoughnessDie, RoughnessNum, clamped_mask);
+    Metal = mix(MetalDie, MetalNum, clamped_mask);
+    Clearcoat = mix(ClearcoatDie, ClearcoatNum, clamped_mask);
+}
+
+// shader that changes two shaders between displaced and not displaced mesh

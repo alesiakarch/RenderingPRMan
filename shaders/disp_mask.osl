@@ -3,8 +3,7 @@ shader disp_mask(
     output float mask = 0
 )
 {
-    //mask = (dispAmount > 0.01) ? 1.0 : 0.0; // sharp transition
-    //mask = smoothstep(0.001, 0.01, abs(dispAmount)); // smooth blending
-    mask = smoothstep(0.01, 0.05, dispAmount);
+    //mask = (dispAmount > 0.1) ? 1.0 : 0.0; // sharp transition
+    mask = smoothstep(0.09, 0.11, dispAmount); // soft transition around 0.1
 
 }

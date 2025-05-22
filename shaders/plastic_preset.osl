@@ -1,0 +1,35 @@
+shader plastic_preset(
+    color baseColor = color(0.8, 0.6, 0.4),  // Typical plastic color
+    float roughness = 0.4,                    // Somewhat rough surface
+    float metallic = 0.0,                     // Plastic is non-metallic
+    float clearcoat = 0.0,                    // Usually no clearcoat
+    output color Cout = color(0,0,0),
+    output float Roughness = 0,
+    output float Metal = 0,
+    output float Clearcoat = 0
+)
+{
+    Cout = baseColor;
+    Roughness = roughness;
+    Metal = metallic;
+    Clearcoat = clearcoat;
+}
+
+// Full Screen
+// Bxdf "PxrDisney" "id" 
+//     "color baseColor"  [.2 .5 .8] 
+//     "color emitColor"  [0 0 0] 
+//     "float subsurface"  [0] 
+//     "color subsurfaceColor"  [0 0 0] 
+//     "float metallic"  [0] 
+//     "float specular"  [.5] 
+//     "float specularTint"  [0] 
+//     "float roughness"  [.25] 
+//     "float anisotropic"  [0] 
+//     "float sheen"  [0] 
+//     "float sheenTint"  [.5] 
+//     "float clearcoat"  [0] 
+//     "float clearcoatGloss"  [1] 
+//     "normal bumpNormal"  [0 0 0] 
+//     "float presence"  [1] 
+//     "int inputAOV"  [0]

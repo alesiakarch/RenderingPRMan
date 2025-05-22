@@ -1,0 +1,36 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: 
+shader perlin_colour_map
+param	color	ColorA	0 0 0		%read{5,5} %write{2147483647,-1}
+param	color	ColorB	0 0 0		%read{5,5} %write{2147483647,-1}
+param	float	scale	5		%read{0,0} %write{2147483647,-1}
+oparam	color	Cout	0 0 0		%read{2147483647,-1} %write{5,5}
+global	point	P	%read{0,0} %write{2147483647,-1}
+local	point	p	%read{3,3} %write{2,2}
+local	float	n	%read{4,5} %write{3,4}
+const	string	$const1	"object"		%read{2,2} %write{2147483647,-1}
+temp	point	$tmp1	%read{2,2} %write{0,0}
+const	string	$const2	"transform"		%read{1,1} %write{2147483647,-1}
+const	string	$const3	"common"		%read{2,2} %write{2147483647,-1}
+const	string	$const4	"uperlin"		%read{3,3} %write{2147483647,-1}
+const	float	$const5	0.300000012		%read{4,4} %write{2147483647,-1}
+const	float	$const6	0.600000024		%read{4,4} %write{2147483647,-1}
+code ___main___
+# ../shaders/perlin_colour_map.osl:8
+#     point p = transform("object", P * scale);
+	mul		$tmp1 P scale 	%filename{"../shaders/perlin_colour_map.osl"} %line{8} %argrw{"wrr"}
+	functioncall	$const2 3 	%argrw{"r"}
+# /opt/pixar/RenderManProServer-26.3/lib/osl/include/stdosl.h:263
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	p $const3 $const1 $tmp1 	%filename{"/opt/pixar/RenderManProServer-26.3/lib/osl/include/stdosl.h"} %line{263} %argrw{"wrrr"}
+# ../shaders/perlin_colour_map.osl:9
+#     float n = noise("uperlin", p);
+	noise		n $const4 p 	%filename{"../shaders/perlin_colour_map.osl"} %line{9} %argrw{"wrr"}
+# ../shaders/perlin_colour_map.osl:10
+#     n = smoothstep(0.3, 0.6, n); 
+	smoothstep	n $const5 $const6 n 	%line{10} %argrw{"wrrr"}
+# ../shaders/perlin_colour_map.osl:11
+#     Cout = mix(ColorA, ColorB, n);
+	mix		Cout ColorA ColorB n 	%line{11} %argrw{"wrrr"}
+	end

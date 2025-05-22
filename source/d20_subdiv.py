@@ -132,11 +132,13 @@ print(f"{edges}")
 intargs = [v for edge in edges for v in edge] 
 
 nargs = [2] * len(edges) * 2     # ONE entry: total number of ints
-floatargs = [5.0] * 60
+floatargs = [3.0] * 60
 #face_ids = list(range(1, 21))  # [0, 1, 2, ..., 19]
 
+face_pattern = [1, 19, 9, 11, 13, 7, 5, 15, 20, 8, 6, 16, 14, 12, 10, 2, 3, 4, 17, 18]  # correct order of number to map to face order 1 2 3 4 5 ... 20 
 facevarying_faceid = []
-for i in list(range(1, 21)):
+
+for i in face_pattern:
     facevarying_faceid.extend([i, i, i])
 
 #print("nargs:", nargs)

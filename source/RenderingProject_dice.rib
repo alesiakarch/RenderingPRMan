@@ -6,6 +6,8 @@ Display "Dice" "it" "rgba"
 Format 1920 1080 1.0
 Projection "perspective" "fov" [20]
 Translate 0 0 7
+Integrator "PxrPathTracer" "integrator"
+
 
 
 WorldBegin
@@ -22,8 +24,7 @@ WorldBegin
         Rotate -45 0 0 1
         Light "PxrDomeLight" "theLight" "float exposure" [0] 
             "string lightColorMap" ["../wrestling_gym_4k.tx"] 
-            "int enableShadows" [1]
-            "float intensity" [1.0]  # Adjust as needed
+            "float intensity" [0.5]  # Adjust as needed
     AttributeEnd
 
     # Light "PxrDistantLight" "test_light"
@@ -40,7 +41,7 @@ WorldBegin
     AttributeBegin
         Translate 0.7 -0.1 -2
         #Rotate -10 0 0 1
-        Rotate 120 0 1 0
+        Rotate 300 0 1 0
         #Rotate 20 1 0 0
         Scale 0.5 0.5 0.5
         #Rotate 65 0 1 0
@@ -61,19 +62,57 @@ WorldBegin
                  "reference float dispScalar" ["dispPattern:resultF"]
                  "float dispAmount" [-0.04]
 
-        # Colour shader
-        Pattern  "show_uvs" "uv_check"   
+        # Number shaders
+        Pattern  "paint_preset" "paint"
+        Pattern "metallic_paint_preset" "metallic_paint"
+
+        # Die shaders
+        Pattern "plastic_preset" "plastic"
+        Pattern "perlin_colour_map" "perlin_colour"
+                "color ColorA" [0.9 0.1 0.0]
+                "color ColorB" [0.1 0.1 0.1]
+                "float scale" [1.0]
 
         # Colour switch shader
-        Pattern "colour_switch" "die_color" 
-                "color ColourA" [0.1 0.0 0.0]
-                "color ColourB" [0.0 1.0 0.0]
+        Pattern "shader_switch" "final_colour" 
+                "reference color ColourDie" ["perlin_colour:Cout"]
+                "reference color ColourNum" ["metallic_paint:Cout"]
+                "float RoughnessDie" ["plastic:Roughness"]
+                "float RoughnessNum" ["metallic_paint:Roughness"]
+                "float MetalDie" ["plastic:Metal"]
+                "float MetalNum" ["metallic_paint:Metal"]
+                "float ClearcoatDie" [0]
+                "float ClearcoatNum" ["metallic_paint:Clearcoat"]
+         
                 "reference float mask" ["dispMask:mask"]
 
-        Bxdf "PxrDisney" "for_d20" "reference color baseColor" ["die_color:Cout"]
-        #Bxdf  "PxrDiffuse" "diffuse_d20" "color diffuseColor" [0.2 0.6 0.2]
-        
-        #Sphere 1 -1 1 360
+        # # PxrDisney for most of the shaders
+        # Bxdf "PxrDisney" "for_d20"
+        #      "reference color baseColor" ["final_colour:Cout"]
+        #      "reference float roughness" ["final_colour:Roughness"]
+        #      "reference float metallic" ["final_colour:Metal"]
+        #      "reference float clearcoat" ["final_colour:Clearcoat"]
+        #      "float transmission" [1]
+             
+        # PxrSurface for the translucent shader
+        Pattern "epoxy_preset" "epoxy"
+        "color Tint" [0.2 1.0 0.2]
+        "float IOR" [1.5]
+        "float Roughness" [0.2]
+        "float Transmission" [1.0]
+        "float Presence" [1.0]
+        "float Reflection" [0.0]
+
+        Bxdf "PxrSurface" "epoxy_die"
+        "reference color diffuseColor" ["epoxy:Cout"]
+        "float diffuseGain" [0.0]
+        "reference color specularFaceColor" ["epoxy:SpecularFaceColor"]
+        "reference color specularIor" ["epoxy:SpecularIor"]
+        "reference float specularRoughness" ["epoxy:SpecRough"]
+        "reference color refractionColor" ["epoxy:RefractColor"]
+        "reference float refractionGain" ["epoxy:RefractionGain"]
+        "reference float reflectionGain" ["epoxy:ReflectionGain"]
+        "reference float presence" ["epoxy:PresenceOut"]
 
         #ObjectInstance "D20"
         ReadArchive "../models/D20_subdiv.rib"
@@ -90,7 +129,9 @@ WorldBegin
                 "string tex_path" ["../textures/wood.tx"]
                 # "float tile_u" [2.0]
                 # "float tile_v" [2.0]
-        Bxdf "PxrDisney" "tabletop_color" "reference color baseColor" ["tabletop_tex:Cout"]
+        Bxdf "PxrDisney" "tabletop_color" 
+             "reference color baseColor" ["tabletop_tex:Cout"]
+             "float roughness" [0.3]
         Patch "bilinear" "P" [-0.5 -0.5 0.5 -0.5 0.5 0.5 0.5 -0.5 0.5 0.5 0.5 0.5]
 
     AttributeEnd

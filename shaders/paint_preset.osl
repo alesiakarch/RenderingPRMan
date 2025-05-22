@@ -1,0 +1,15 @@
+shader paint_preset(
+    color baseColor = color(0.9, 0.9, 0.9),  // Default matte paint color
+    float roughness = 0.6,                    // Matte roughness
+    float clearcoat = 0.1,                    // Slight clearcoat for paint
+    output color Cout = color(0,0,0),
+    output float Roughness = 0,
+    output float Metallic = 0,
+    output float Clearcoat = 0
+)
+{
+    Cout = baseColor;
+    Roughness = roughness;
+    Metallic = 0.0;       // matte paint is non-metallic
+    Clearcoat = clearcoat;
+}

@@ -1,0 +1,15 @@
+shader metallic_paint_preset(
+    color baseColor = color(1.0, 0.7, 0.3),  // Default metallic paint color (gold-ish)
+    float roughness = 0.3,                    // Smoother for metallic paint
+    float clearcoat = 0.3,                    // Stronger clearcoat for shine
+    output color Cout = color(0,0,0),
+    output float Roughness = 0,
+    output float Metallic = 0,
+    output float Clearcoat = 0
+)
+{
+    Cout = baseColor;
+    Roughness = roughness;
+    Metallic = 1.0;       // metallic paint is fully metallic
+    Clearcoat = clearcoat;
+}

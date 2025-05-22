@@ -1,0 +1,104 @@
+shader epoxy_preset(
+    color Tint = color(0.95, 0.98, 1.0),
+    float IOR = 1.5,
+    float Roughness = 0.01,
+    float Transmission = 1.0,
+    float Presence = 1.0,
+    float Reflection = 0.0,
+    output color Cout = 0,
+    output float SpecRough = 0,
+    output float RefractionGain = 0,
+    output float ReflectionGain = 0,
+    output float PresenceOut = 1.0,
+    output color RefractColor = 0,
+    output color SpecularFaceColor = 0,
+    output color SpecularIor = 0
+)
+{
+    Cout = Tint;
+    SpecRough = Roughness;
+    RefractionGain = Transmission;
+    ReflectionGain = Reflection; // Full reflection
+    PresenceOut = Presence;
+    RefractColor = Tint;
+    SpecularFaceColor = Tint;
+    SpecularIor = color(IOR, IOR, IOR); // PxrSurface expects color for IOR
+}
+// Full Screen
+// Bxdf "PxrSurface" "id" 
+//     "float inputMaterial"  ['No Value'] 
+//     "int utilityPattern"  [0] 
+//     "float diffuseGain"  [1.0] 
+//     "color diffuseColor"  [0.18 0.18 0.18] 
+//     "float diffuseRoughness"  [0.0] 
+//     "int specularFresnelMode"  [0] 
+//     "color specularFaceColor"  [0 0 0] 
+//     "color specularEdgeColor"  [0 0 0] 
+//     "float specularFresnelShape"  [5.0] 
+//     "color specularIor"  [1.5 1.5 1.5] 
+//     "color specularExtinctionCoeff"  [0.0 0.0 0.0] 
+//     "float specularRoughness"  [0.2] 
+//     "int roughSpecularFresnelMode"  [0] 
+//     "color roughSpecularFaceColor"  [0 0 0] 
+//     "color roughSpecularEdgeColor"  [0 0 0] 
+//     "float roughSpecularFresnelShape"  [5.0] 
+//     "color roughSpecularIor"  [1.5 1.5 1.5] 
+//     "color roughSpecularExtinctionCoeff"  [0.0 0.0 0.0] 
+//     "float roughSpecularRoughness"  [0.6] 
+//     "int clearcoatFresnelMode"  [0] 
+//     "color clearcoatFaceColor"  [0 0 0] 
+//     "color clearcoatEdgeColor"  [0 0 0] 
+//     "float clearcoatFresnelShape"  [5.0] 
+//     "color clearcoatIor"  [1.5 1.5 1.5] 
+//     "color clearcoatExtinctionCoeff"  [0.0 0.0 0.0] 
+//     "float clearcoatThickness"  [0.0] 
+//     "color clearcoatAbsorptionTint"  [0.0 0.0 0.0] 
+//     "float clearcoatRoughness"  [0.0] 
+//     "float specularEnergyCompensation"  [0.0] 
+//     "float clearcoatEnergyCompensation"  [0.0] 
+//     "float iridescenceFaceGain"  [0] 
+//     "float iridescenceEdgeGain"  [0] 
+//     "float iridescenceFresnelShape"  [5.0] 
+//     "int iridescenceMode"  [0] 
+//     "color iridescencePrimaryColor"  [1 0 0] 
+//     "color iridescenceSecondaryColor"  [0 0 1] 
+//     "float iridescenceRoughness"  [0.2] 
+//     "float fuzzGain"  [0.0] 
+//     "color fuzzColor"  [1 1 1] 
+//     "float fuzzConeAngle"  [8] 
+//     "int subsurfaceType"  [0] 
+//     "float subsurfaceGain"  [0.0] 
+//     "color subsurfaceColor"  [0.830 0.791 0.753] 
+//     "float subsurfaceDmfp"  [10] 
+//     "color subsurfaceDmfpColor"  [0.851 0.557 0.395] 
+//     "float shortSubsurfaceGain"  [0.0] 
+//     "color shortSubsurfaceColor"  [0.9 0.9 0.9] 
+//     "float shortSubsurfaceDmfp"  [5] 
+//     "float longSubsurfaceGain"  [0.0] 
+//     "color longSubsurfaceColor"  [0.8 0.0 0.0] 
+//     "float longSubsurfaceDmfp"  [20] 
+//     "float subsurfaceDirectionality"  [0.0] 
+//     "float subsurfaceBleed"  [0.0] 
+//     "float subsurfaceDiffuseBlend"  [0.0] 
+//     "int subsurfaceResolveSelfIntersections"  [0] 
+//     "float subsurfaceIor"  [1.4] 
+//     "float singlescatterGain"  [0.0] 
+//     "color singlescatterColor"  [0.830 0.791 0.753] 
+//     "float singlescatterMfp"  [10] 
+//     "color singlescatterMfpColor"  [0.851 0.557 0.395] 
+//     "color irradianceTint"  [1.0 1.0 1.0] 
+//     "float irradianceRoughness"  [0.0] 
+//     "float unitLength"  [0.1] 
+//     "float refractionGain"  [0.0] 
+//     "float reflectionGain"  [0.0] 
+//     "color refractionColor"  [1 1 1] 
+//     "float glassRoughness"  [0.1] 
+//     "float glowGain"  [0.0] 
+//     "color glowColor"  [1 1 1] 
+//     "normal bumpNormal"  [0 0 0] 
+//     "color shadowColor"  [0.0 0.0 0.0] 
+//     "int shadowMode"  [0] 
+//     "float presence"  [1] 
+//     "int presenceCached"  [1] 
+//     "int mwStartable"  [0] 
+//     "float roughnessMollificationClamp"  [32]

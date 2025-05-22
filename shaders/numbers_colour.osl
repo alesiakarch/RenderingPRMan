@@ -1,0 +1,6 @@
+shader numbers_colour(
+    output color Cout = 0
+)
+{
+    Cout = color(0.0, 1.0, 0.0);
+}

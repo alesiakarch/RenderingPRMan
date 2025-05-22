@@ -1,0 +1,26 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: 
+shader metallic_paint_preset
+param	color	baseColor	1 0.699999988 0.300000012		%read{0,0} %write{2147483647,-1}
+param	float	roughness	0.300000012		%read{1,1} %write{2147483647,-1}
+param	float	clearcoat	0.300000012		%read{3,3} %write{2147483647,-1}
+oparam	color	Cout	0 0 0		%read{2147483647,-1} %write{0,0}
+oparam	float	Roughness	0		%read{2147483647,-1} %write{1,1}
+oparam	float	Metallic	0		%read{2147483647,-1} %write{2,2}
+oparam	float	Clearcoat	0		%read{2147483647,-1} %write{3,3}
+const	float	$const1	1		%read{2,2} %write{2147483647,-1}
+code ___main___
+# ../shaders/metallic_paint_preset.osl:11
+#     Cout = baseColor;
+	assign		Cout baseColor 	%filename{"../shaders/metallic_paint_preset.osl"} %line{11} %argrw{"wr"}
+# ../shaders/metallic_paint_preset.osl:12
+#     Roughness = roughness;
+	assign		Roughness roughness 	%line{12} %argrw{"wr"}
+# ../shaders/metallic_paint_preset.osl:13
+#     Metallic = 1.0;       // metallic paint is fully metallic
+	assign		Metallic $const1 	%line{13} %argrw{"wr"}
+# ../shaders/metallic_paint_preset.osl:14
+#     Clearcoat = clearcoat;
+	assign		Clearcoat clearcoat 	%line{14} %argrw{"wr"}
+	end

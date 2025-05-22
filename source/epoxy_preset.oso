@@ -1,0 +1,44 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: 
+shader epoxy_preset
+param	color	Tint	0.949999988 0.980000019 1		%read{0,6} %write{2147483647,-1}
+param	float	IOR	1.5		%read{7,7} %write{2147483647,-1}
+param	float	Roughness	0.00999999978		%read{1,1} %write{2147483647,-1}
+param	float	Transmission	1		%read{2,2} %write{2147483647,-1}
+param	float	Presence	1		%read{4,4} %write{2147483647,-1}
+param	float	Reflection	0		%read{3,3} %write{2147483647,-1}
+oparam	color	Cout	0 0 0		%read{2147483647,-1} %write{0,0}
+oparam	float	SpecRough	0		%read{2147483647,-1} %write{1,1}
+oparam	float	RefractionGain	0		%read{2147483647,-1} %write{2,2}
+oparam	float	ReflectionGain	0		%read{2147483647,-1} %write{3,3}
+oparam	float	PresenceOut	1		%read{2147483647,-1} %write{4,4}
+oparam	color	RefractColor	0 0 0		%read{2147483647,-1} %write{5,5}
+oparam	color	SpecularFaceColor	0 0 0		%read{2147483647,-1} %write{6,6}
+oparam	color	SpecularIor	0 0 0		%read{2147483647,-1} %write{7,7}
+code ___main___
+# ../shaders/epoxy_preset.osl:18
+#     Cout = Tint;
+	assign		Cout Tint 	%filename{"../shaders/epoxy_preset.osl"} %line{18} %argrw{"wr"}
+# ../shaders/epoxy_preset.osl:19
+#     SpecRough = Roughness;
+	assign		SpecRough Roughness 	%line{19} %argrw{"wr"}
+# ../shaders/epoxy_preset.osl:20
+#     RefractionGain = Transmission;
+	assign		RefractionGain Transmission 	%line{20} %argrw{"wr"}
+# ../shaders/epoxy_preset.osl:21
+#     ReflectionGain = Reflection; // Full reflection
+	assign		ReflectionGain Reflection 	%line{21} %argrw{"wr"}
+# ../shaders/epoxy_preset.osl:22
+#     PresenceOut = Presence;
+	assign		PresenceOut Presence 	%line{22} %argrw{"wr"}
+# ../shaders/epoxy_preset.osl:23
+#     RefractColor = Tint;
+	assign		RefractColor Tint 	%line{23} %argrw{"wr"}
+# ../shaders/epoxy_preset.osl:24
+#     SpecularFaceColor = Tint;
+	assign		SpecularFaceColor Tint 	%line{24} %argrw{"wr"}
+# ../shaders/epoxy_preset.osl:25
+#     SpecularIor = color(IOR, IOR, IOR); // PxrSurface expects color for IOR
+	color		SpecularIor IOR IOR IOR 	%line{25} %argrw{"wrrr"}
+	end
