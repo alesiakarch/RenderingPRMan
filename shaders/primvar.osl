@@ -1,9 +1,0 @@
-shader primvar(
-    string varname = "",
-    output int resultI = 0
-)
-{
-    resultI = 0;
-    if (varname != "")
-        getattribute(varname, resultI);
-}

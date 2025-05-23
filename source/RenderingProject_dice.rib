@@ -25,12 +25,8 @@ WorldBegin
         Light "PxrDomeLight" "theLight" "float exposure" [0] 
             "string lightColorMap" ["../wrestling_gym_4k.tx"] 
             "float intensity" [0.5]  # Adjust as needed
+            "float specular" [0.7]
     AttributeEnd
-
-    # Light "PxrDistantLight" "test_light"
-    #       "color lightColor" [1 1 1]
-    #       "float intensity" [2.0]
-    #       "vector direction" [0 -1 -1]
     
     # Create instances of the dice
     #ObjectInstance "D4"
@@ -50,41 +46,69 @@ WorldBegin
         # Displacement
         Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
 
-        # Displacement shader patter to get unique number per face
+        # Displacement shader pattern to get unique number per face
         Pattern "number_per_face" "dispPattern"
                 "string tex_path" ["../textures"]
 
         # Pattern displacement mask
         Pattern "disp_mask" "dispMask"
                 "reference float dispAmount" ["dispPattern:resultF"]
-   
+
+        # Displacement shader for numbers
         Displace "PxrDisplace" "numberDisp"
                  "reference float dispScalar" ["dispPattern:resultF"]
                  "float dispAmount" [-0.04]
 
-        # Number shaders
+        # Number colour shaders
         Pattern  "paint_preset" "paint"
+
         Pattern "metallic_paint_preset" "metallic_paint"
 
-        # Die shaders
+        # Die colour shaders
         Pattern "plastic_preset" "plastic"
+
         Pattern "perlin_colour_map" "perlin_colour"
                 "color ColorA" [0.9 0.1 0.0]
                 "color ColorB" [0.1 0.1 0.1]
                 "float scale" [1.0]
 
+        Pattern "epoxy_preset" "epoxy"
+                "color Tint" [0.2 1.0 0.2]
+                "float IOR" [1.5]
+                "float Roughness" [0.2]
+                "float Transmission" [1.0]
+                "float Presence" [1.0]
+                "float Reflection" [0.2]
+
         # Colour switch shader
         Pattern "shader_switch" "final_colour" 
-                "reference color ColourDie" ["perlin_colour:Cout"]
-                "reference color ColourNum" ["metallic_paint:Cout"]
-                "float RoughnessDie" ["plastic:Roughness"]
-                "float RoughnessNum" ["metallic_paint:Roughness"]
-                "float MetalDie" ["plastic:Metal"]
-                "float MetalNum" ["metallic_paint:Metal"]
-                "float ClearcoatDie" [0]
-                "float ClearcoatNum" ["metallic_paint:Clearcoat"]
-         
-                "reference float mask" ["dispMask:mask"]
+                "reference float mask" ["dispMask:mask"] # shared mask
+                "reference color ColourDie" ["epoxy:Cout"] # shared Cout
+                "reference color ColourNum" ["paint:Cout"]
+                # pxr disney params
+                # "reference float RoughnessDie" ["plastic:Roughness"]
+                # "reference float RoughnessNum" ["metallic_paint:Roughness"]
+                # "reference float MetalDie" ["plastic:Metal"]
+                # "reference float MetalNum" ["metallic_paint:Metal"]
+                # "float ClearcoatDie" [0]
+                # "reference float ClearcoatNum" ["metallic_paint:Clearcoat"]
+                # pxr surface params
+                "reference float SpecRoughDie" ["epoxy:SpecRough"]
+                "reference float SpecRoughNum" ["paint:SpecRough"]
+                "reference color SpecularFaceColorDie" ["epoxy:SpecularFaceColor"] # TRY DIFFERENT VALUES AT SPECULAR FACE COLOR AND REFRACT COLOUR 
+                "reference color SpecularFaceColorNum" ["paint:SpecularFaceColor"]
+                "reference color SpecularIorDie" ["epoxy:SpecularIor"]
+                "reference color SpecularIorNum" ["paint:SpecularIor"]
+                "reference color RefractColorDie" ["epoxy:RefractColor"]
+                "reference color RefractColorNum" ["paint:RefractColor"]
+                "reference float RefractionGainDie" ["epoxy:RefractionGain"]
+                "reference float RefractionGainNum" ["paint:RefractionGain"]
+                "reference float ReflectionGainDie" ["epoxy:ReflectionGain"]
+                "reference float ReflectionGainNum" ["paint:ReflectionGain"]
+                "reference float PresenceDie" ["epoxy:PresenceOut"]
+                "reference float PresenceNum" ["paint:PresenceOut"]
+
+                
 
         # # PxrDisney for most of the shaders
         # Bxdf "PxrDisney" "for_d20"
@@ -92,27 +116,30 @@ WorldBegin
         #      "reference float roughness" ["final_colour:Roughness"]
         #      "reference float metallic" ["final_colour:Metal"]
         #      "reference float clearcoat" ["final_colour:Clearcoat"]
-        #      "float transmission" [1]
              
-        # PxrSurface for the translucent shader
-        Pattern "epoxy_preset" "epoxy"
-        "color Tint" [0.2 1.0 0.2]
-        "float IOR" [1.5]
-        "float Roughness" [0.2]
-        "float Transmission" [1.0]
-        "float Presence" [1.0]
-        "float Reflection" [0.0]
-
+        #PxrSurface for the translucent shader
         Bxdf "PxrSurface" "epoxy_die"
-        "reference color diffuseColor" ["epoxy:Cout"]
-        "float diffuseGain" [0.0]
-        "reference color specularFaceColor" ["epoxy:SpecularFaceColor"]
-        "reference color specularIor" ["epoxy:SpecularIor"]
-        "reference float specularRoughness" ["epoxy:SpecRough"]
-        "reference color refractionColor" ["epoxy:RefractColor"]
-        "reference float refractionGain" ["epoxy:RefractionGain"]
-        "reference float reflectionGain" ["epoxy:ReflectionGain"]
-        "reference float presence" ["epoxy:PresenceOut"]
+             "reference color diffuseColor" ["final_colour:Cout"]
+             "float diffuseGain" [0.0]
+             "reference color specularFaceColor" ["final_colour:SpecularFaceColor"]
+             "reference color specularIor" ["final_colour:SpecularIor"]
+             "reference float specularRoughness" ["final_colour:SpecRough"]
+             "reference color refractionColor" ["final_colour:RefractColor"]
+             "reference float refractionGain" ["final_colour:RefractionGain"]
+             "reference float reflectionGain" ["final_colour:ReflectionGain"]
+             "reference float presence" ["final_colour:PresenceOut"]
+
+
+        # Bxdf "PxrSurface" "raw_epoxy"
+        #      "reference color diffuseColor" ["epoxy:Cout"]
+        #      "float diffuseGain" [0.0]
+        #      "reference color specularFaceColor" ["epoxy:SpecularFaceColor"]
+        #      "reference color specularIor" ["epoxy:SpecularIor"]
+        #      "reference float specularRoughness" ["epoxy:SpecRough"]
+        #      "reference color refractionColor" ["epoxy:RefractColor"]
+        #      "reference float refractionGain" ["epoxy:RefractionGain"]
+        #      "reference float reflectionGain" ["epoxy:ReflectionGain"]
+        #      "reference float presence" ["epoxy:PresenceOut"]
 
         #ObjectInstance "D20"
         ReadArchive "../models/D20_subdiv.rib"

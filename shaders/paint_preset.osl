@@ -1,15 +1,39 @@
 shader paint_preset(
     color baseColor = color(0.9, 0.9, 0.9),  // Default matte paint color
-    float roughness = 0.6,                    // Matte roughness
-    float clearcoat = 0.1,                    // Slight clearcoat for paint
+    float roughness = 0.6,                   // Matte roughness
+    float clearcoat = 0.1,                   // Slight clearcoat for paint
+    float IOR = 1.5,                         // Index of refraction for surface
+
+    // shader Cout
     output color Cout = color(0,0,0),
+
+    // PxrDisney outputs
     output float Roughness = 0,
     output float Metallic = 0,
-    output float Clearcoat = 0
+    output float Clearcoat = 0,
+    
+    // PxrSurface outputs
+    output float SpecRough = 0,
+    output color SpecularFaceColor = 0,
+    output color SpecularIor = 0,
+    output color RefractColor = 0,
+    output float RefractionGain = 0,
+    output float ReflectionGain = 0,
+    output float PresenceOut = 1.0
 )
 {
+    // PxrDisney outputs
     Cout = baseColor;
     Roughness = roughness;
     Metallic = 0.0;       // matte paint is non-metallic
     Clearcoat = clearcoat;
+
+    // PxrSurface outputs
+    SpecRough = roughness;
+    SpecularFaceColor = baseColor;
+    SpecularIor = color(IOR, IOR, IOR);
+    RefractColor = baseColor;
+    RefractionGain = 0.0;      // matte paint is not transmissive
+    ReflectionGain = 0.2;      // low reflection for matte
+    PresenceOut = 1.0;         // fully present (opaque)
 }

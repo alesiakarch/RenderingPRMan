@@ -1,15 +1,40 @@
 shader metallic_paint_preset(
+    
     color baseColor = color(1.0, 0.7, 0.3),  // Default metallic paint color (gold-ish)
-    float roughness = 0.3,                    // Smoother for metallic paint
-    float clearcoat = 0.3,                    // Stronger clearcoat for shine
+    float roughness = 0.3,                   // Smoother for metallic paint
+    float clearcoat = 0.3,                   // Stronger clearcoat for shine
+    float IOR = 1.5,                         // Index of refraction for metallic look
+
+    //shared Cout
     output color Cout = color(0,0,0),
+
+    // PxrDisney outputs
     output float Roughness = 0,
     output float Metallic = 0,
-    output float Clearcoat = 0
+    output float Clearcoat = 0,
+    
+    // PxrSurface outputs
+    output float SpecRough = 0,
+    output color SpecularFaceColor = 0,
+    output color SpecularIor = 0,
+    output color RefractColor = 0,
+    output float RefractionGain = 0,
+    output float ReflectionGain = 0,
+    output float PresenceOut = 1.0
 )
 {
+    // PxrDisney outputs
     Cout = baseColor;
     Roughness = roughness;
     Metallic = 1.0;       // metallic paint is fully metallic
     Clearcoat = clearcoat;
+
+    // PxrSurface outputs
+    SpecRough = roughness;
+    SpecularFaceColor = baseColor;
+    SpecularIor = color(IOR, IOR, IOR);
+    RefractColor = baseColor;
+    RefractionGain = 0.0;      // metallic paint is not transmissive
+    ReflectionGain = 1.0;      // strong reflection for metallic
+    PresenceOut = 1.0;         // fully present (opaque)
 }

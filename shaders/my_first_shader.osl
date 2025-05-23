@@ -1,8 +1,0 @@
-shader my_first
-    (
-        color Cin = 0,
-        output color Cout = 0
-    )
-    {
-        Cout = Cin;
-    }

@@ -2,42 +2,54 @@ OpenShadingLanguage 1.00
 # Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
 # options: 
 shader shader_switch
-param	color	ColourDie	0 0 0		%read{3,3} %write{2147483647,-1}
-param	color	ColourNum	0 0 0		%read{3,3} %write{2147483647,-1}
-param	float	RoughnessDie	0		%read{4,4} %write{2147483647,-1}
-param	float	RoughnessNum	0		%read{4,4} %write{2147483647,-1}
-param	float	MetalDie	0		%read{5,5} %write{2147483647,-1}
-param	float	MetalNum	0		%read{5,5} %write{2147483647,-1}
-param	float	ClearcoatDie	0		%read{6,6} %write{2147483647,-1}
-param	float	ClearcoatNum	0		%read{6,6} %write{2147483647,-1}
-param	float	mask	0		%read{1,1} %write{2147483647,-1}
-oparam	color	Cout	0 0 0		%read{2147483647,-1} %write{3,3}
-oparam	float	Roughness	0		%read{2147483647,-1} %write{4,4}
-oparam	float	Metal	0		%read{2147483647,-1} %write{5,5}
-oparam	float	Clearcoat	0		%read{2147483647,-1} %write{6,6}
-local	float	clamped_mask	%read{3,6} %write{2,2}
-const	float	$const2	0		%read{2,2} %write{2147483647,-1}
-const	float	$const4	1		%read{1,1} %write{2147483647,-1}
-const	string	$const5	"clamp"		%read{0,0} %write{2147483647,-1}
-temp	float	$tmp1	%read{2,2} %write{1,1}
+param	color	ColourDie	0 0 0		%read{0,0} %write{2147483647,-1}
+param	color	ColourNum	0 0 0		%read{0,0} %write{2147483647,-1}
+param	color	SpecularFaceColorDie	0 0 0		%read{1,1} %write{2147483647,-1}
+param	color	SpecularFaceColorNum	0 0 0		%read{1,1} %write{2147483647,-1}
+param	color	SpecularIorDie	1.5 1.5 1.5		%read{2,2} %write{2147483647,-1}
+param	color	SpecularIorNum	1.5 1.5 1.5		%read{2,2} %write{2147483647,-1}
+param	float	SpecRoughDie	0.200000003		%read{3,3} %write{2147483647,-1}
+param	float	SpecRoughNum	0.200000003		%read{3,3} %write{2147483647,-1}
+param	color	RefractColorDie	0 0 0		%read{4,4} %write{2147483647,-1}
+param	color	RefractColorNum	0 0 0		%read{4,4} %write{2147483647,-1}
+param	float	RefractionGainDie	1		%read{5,5} %write{2147483647,-1}
+param	float	RefractionGainNum	0		%read{5,5} %write{2147483647,-1}
+param	float	ReflectionGainDie	0.200000003		%read{6,6} %write{2147483647,-1}
+param	float	ReflectionGainNum	1		%read{6,6} %write{2147483647,-1}
+param	float	PresenceDie	1		%read{7,7} %write{2147483647,-1}
+param	float	PresenceNum	1		%read{7,7} %write{2147483647,-1}
+param	float	mask	0		%read{0,7} %write{2147483647,-1}
+oparam	color	Cout	0 0 0		%read{2147483647,-1} %write{0,0}
+oparam	color	SpecularFaceColor	0 0 0		%read{2147483647,-1} %write{1,1}
+oparam	color	SpecularIor	0 0 0		%read{2147483647,-1} %write{2,2}
+oparam	float	SpecRough	0		%read{2147483647,-1} %write{3,3}
+oparam	color	RefractColor	0 0 0		%read{2147483647,-1} %write{4,4}
+oparam	float	RefractionGain	0		%read{2147483647,-1} %write{5,5}
+oparam	float	ReflectionGain	0		%read{2147483647,-1} %write{6,6}
+oparam	float	PresenceOut	1		%read{2147483647,-1} %write{7,7}
 code ___main___
-# ../shaders/shader_switch.osl:21
-#     float clamped_mask = clamp(mask, 0, 1);
-	functioncall	$const5 3 	%filename{"../shaders/shader_switch.osl"} %line{21} %argrw{"r"}
-# /opt/pixar/RenderManProServer-26.3/lib/osl/include/stdosl.h:141
-# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
-	min		$tmp1 mask $const4 	%filename{"/opt/pixar/RenderManProServer-26.3/lib/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
-	max		clamped_mask $tmp1 $const2 	%argrw{"wrr"}
-# ../shaders/shader_switch.osl:22
-#     Cout = mix(ColourDie, ColourNum, clamped_mask);
-	mix		Cout ColourDie ColourNum clamped_mask 	%filename{"../shaders/shader_switch.osl"} %line{22} %argrw{"wrrr"}
-# ../shaders/shader_switch.osl:23
-#     Roughness = mix(RoughnessDie, RoughnessNum, clamped_mask);
-	mix		Roughness RoughnessDie RoughnessNum clamped_mask 	%line{23} %argrw{"wrrr"}
-# ../shaders/shader_switch.osl:24
-#     Metal = mix(MetalDie, MetalNum, clamped_mask);
-	mix		Metal MetalDie MetalNum clamped_mask 	%line{24} %argrw{"wrrr"}
-# ../shaders/shader_switch.osl:25
-#     Clearcoat = mix(ClearcoatDie, ClearcoatNum, clamped_mask);
-	mix		Clearcoat ClearcoatDie ClearcoatNum clamped_mask 	%line{25} %argrw{"wrrr"}
+# ../shaders/shader_switch.osl:99
+#     Cout = mix(ColourDie, ColourNum, mask);
+	mix		Cout ColourDie ColourNum mask 	%filename{"../shaders/shader_switch.osl"} %line{99} %argrw{"wrrr"}
+# ../shaders/shader_switch.osl:100
+#     SpecularFaceColor = mix(SpecularFaceColorDie, SpecularFaceColorNum, mask);
+	mix		SpecularFaceColor SpecularFaceColorDie SpecularFaceColorNum mask 	%line{100} %argrw{"wrrr"}
+# ../shaders/shader_switch.osl:101
+#     SpecularIor = mix(SpecularIorDie, SpecularIorNum, mask);
+	mix		SpecularIor SpecularIorDie SpecularIorNum mask 	%line{101} %argrw{"wrrr"}
+# ../shaders/shader_switch.osl:102
+#     SpecRough = mix(SpecRoughDie, SpecRoughNum, mask);
+	mix		SpecRough SpecRoughDie SpecRoughNum mask 	%line{102} %argrw{"wrrr"}
+# ../shaders/shader_switch.osl:103
+#     RefractColor = mix(RefractColorDie, RefractColorNum, mask);
+	mix		RefractColor RefractColorDie RefractColorNum mask 	%line{103} %argrw{"wrrr"}
+# ../shaders/shader_switch.osl:104
+#     RefractionGain = mix(RefractionGainDie, RefractionGainNum, mask);
+	mix		RefractionGain RefractionGainDie RefractionGainNum mask 	%line{104} %argrw{"wrrr"}
+# ../shaders/shader_switch.osl:105
+#     ReflectionGain = mix(ReflectionGainDie, ReflectionGainNum, mask);
+	mix		ReflectionGain ReflectionGainDie ReflectionGainNum mask 	%line{105} %argrw{"wrrr"}
+# ../shaders/shader_switch.osl:106
+#     PresenceOut = mix(PresenceDie, PresenceNum, mask);
+	mix		PresenceOut PresenceDie PresenceNum mask 	%line{106} %argrw{"wrrr"}
 	end
