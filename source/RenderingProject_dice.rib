@@ -10,15 +10,8 @@ Integrator "PxrPathTracer" "integrator"
 
 
 
-WorldBegin
-   # Loading the dice set 
-    # ReadArchive "models/D4.rib"
-    # ReadArchive "models/D6.rib"
-    # ReadArchive "models/D8.rib"
-    # ReadArchive "models/D10.rib"
-    # ReadArchive "models/D12.rib"
-    #ReadArchive "../models/D20.rib"
-
+WorldBegin    
+    # HDRI
     AttributeBegin
         Rotate 5 0 1 0
         Rotate -45 0 0 1
@@ -28,12 +21,7 @@ WorldBegin
             "float specular" [0.7]
     AttributeEnd
     
-    # Create instances of the dice
-    #ObjectInstance "D4"
-    #ObjectInstance "D6"
-    #ObjectInstance "D8"
-    #ObjectInstance "D10"
-    #ObjectInstance "D12"
+    # Die object
     AttributeBegin
         Translate 0.7 -0.1 -2
         #Rotate -10 0 0 1
@@ -47,11 +35,11 @@ WorldBegin
         Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
 
         # Displacement shader pattern to get unique number per face
-        Pattern "number_per_face" "dispPattern"
+        Pattern "../shaders/oso/number_per_face" "dispPattern"
                 "string tex_path" ["../textures"]
 
         # Pattern displacement mask
-        Pattern "disp_mask" "dispMask"
+        Pattern "../shaders/oso/disp_mask" "dispMask"
                 "reference float dispAmount" ["dispPattern:resultF"]
 
         # Displacement shader for numbers
@@ -60,19 +48,19 @@ WorldBegin
                  "float dispAmount" [-0.04]
 
         # Number colour shaders
-        Pattern  "paint_preset" "paint"
+        Pattern  "../shaders/oso/paint_preset" "paint"
 
-        Pattern "metallic_paint_preset" "metallic_paint"
+        Pattern "../shaders/oso/metallic_paint_preset" "metallic_paint"
 
         # Die colour shaders
-        Pattern "plastic_preset" "plastic"
+        Pattern "../shaders/oso/plastic_preset" "plastic"
 
-        Pattern "perlin_colour_map" "perlin_colour"
+        Pattern "../shaders/oso/perlin_colour_map" "perlin_colour"
                 "color ColorA" [0.9 0.1 0.0]
                 "color ColorB" [0.1 0.1 0.1]
                 "float scale" [1.0]
 
-        Pattern "epoxy_preset" "epoxy"
+        Pattern "../shaders/oso/epoxy_preset" "epoxy"
                 "color Tint" [0.2 1.0 0.2]
                 "float IOR" [1.5]
                 "float Roughness" [0.2]
@@ -81,7 +69,7 @@ WorldBegin
                 "float Reflection" [0.2]
 
         # Colour switch shader
-        Pattern "shader_switch" "final_colour" 
+        Pattern "../shaders/oso/shader_switch" "final_colour" 
                 "reference float mask" ["dispMask:mask"] # shared mask
                 "reference color ColourDie" ["epoxy:Cout"] # shared Cout
                 "reference color ColourNum" ["paint:Cout"]
@@ -141,7 +129,7 @@ WorldBegin
         #      "reference float reflectionGain" ["epoxy:ReflectionGain"]
         #      "reference float presence" ["epoxy:PresenceOut"]
 
-        #ObjectInstance "D20"
+        # Load die object
         ReadArchive "../models/D20_subdiv.rib"
 
     AttributeEnd
@@ -152,7 +140,7 @@ WorldBegin
         Rotate 90 1 0 0 
         Scale 6 8 1
 
-        Pattern "tabletop" "tabletop_tex"
+        Pattern "../shaders/oso/tabletop" "tabletop_tex"
                 "string tex_path" ["../textures/wood.tx"]
                 # "float tile_u" [2.0]
                 # "float tile_v" [2.0]

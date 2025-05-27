@@ -41,7 +41,7 @@ verts_indices = [i for face in faces for i in face]
 print(f"verts_indices: {verts_indices}")
 
 # Begin writing the object
-ri.Begin("../models/D20_subdiv.rib")
+ri.Begin("D20_subdiv.rib")
 
 ri.Attribute("displacementbound", {"float sphere": 0.5, "string coordinatesystem": "object"})
 
@@ -53,11 +53,7 @@ ri.Rotate(20, 0, 1, 0)
 # Flatten the list of vertices
 points = [coord for v in vertices for coord in v]
 
-# Create placeholder UVs (same layout repeated, not real unwrap)
-# st = []
-# for vert in vertices:
-#     st.extend([0.0, 1.0]) 
-
+# Create identical UVs for all faces
 st = []
 for face in faces:
     st.extend([0.0, 0.0])
@@ -72,8 +68,6 @@ verts = [i for face in faces for i in face]
 print(f"ST: {st}")
 print(f"len(vertices): {len(vertices)}")
 print(f"len(st): {len(st)}")
-#assert len(st) == len(vertices) * 2, "Mismatch between verts and st lengths"
-
 
 uvs = []
 for x, y, z in vertices:

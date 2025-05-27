@@ -1,7 +1,11 @@
 # RenderingPRMan
 A repository for filed used in my Rendering with Renderman project
 
-For my project I want to render either my JBL speaker or my backlit letterboard with the latin proverb. Depends on what is easier to model.
+For my project I want to render a D20 and possibly make a whole dice set.
+
+Run from source
+
+To compile: oslc ../shaders/osl/myshader.osl -o ../shaders/oso/myshader.oso 
 
 ### Resourses
 

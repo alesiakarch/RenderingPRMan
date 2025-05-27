@@ -1,0 +1,40 @@
+shader voronoi_marble(
+    float scale = 10.0,                 // Controls size of Voronoi cells
+    color color1 = color(0.1, 0.1, 0.1),// Black
+    color color2 = color(0.8, 0.3, 0.1),// Red-orange
+    color color3 = color(0.9, 0.9, 0.95),// Pearly gray
+    output color Cout = 0               // Output color
+)
+{
+    // Scale position space for Voronoi tiling
+    point pos = P * scale;
+
+    // Setup for classic Worley-style F1 distance
+    float mindist = 1e10;
+    point cell;
+
+    // Simple 3D hash-based Voronoi
+    for (int xi = -1; xi <= 1; xi++) {
+        for (int yi = -1; yi <= 1; yi++) {
+            for (int zi = -1; zi <= 1; zi++) {
+                point neighbor = floor(pos) + vector(xi, yi, zi);
+                point randomOffset = cellnoise(neighbor);
+                point testPoint = neighbor + randomOffset;
+                float dist = distance(pos, testPoint);
+
+                if (dist < mindist) {
+                    mindist = dist;
+                    cell = testPoint;
+                }
+            }
+        }
+    }
+
+    // Use smooth blending of colors based on distance
+    float t1 = smoothstep(0.0, 0.2, mindist);
+    float t2 = smoothstep(0.2, 0.5, mindist);
+
+    // Blend in layers (black → red-orange → pearl)
+    color blend1 = mix(color1, color2, t1);
+    Cout = mix(blend1, color3, t2);
+}

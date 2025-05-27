@@ -1,7 +1,0 @@
-shader show_uvs(
-    output color Cout = 0
-)
-{
-    Cout = color("rgb", u, v, 0); // Red = U, Green = V
-    //Cout = color(1, 0, 0); // Red = U, Green = V
-}

@@ -1,0 +1,140 @@
+# Starting the rib file for my renderman project
+Display "Dice_scene" "it" "rgba"
+Format 1920 1080 1.0
+Projection "perspective" "fov" [45]
+
+WorldBegin
+    # HDRI
+    AttributeBegin
+        Rotate 5 0 1 0
+        Rotate -45 0 0 1
+        Light "PxrDomeLight" "theLight" "float exposure" [0] 
+            "string lightColorMap" ["../wrestling_gym_4k.tx"] 
+            "float intensity" [0.5]  # Adjust as needed
+            "float specular" [0.7]
+    AttributeEnd
+    
+    # Die one
+    AttributeBegin
+        
+        # Displacement
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+
+        # Displacement pattern to get unique number per face
+        Pattern "number_per_face" "dispPattern"
+                "string tex_path" ["../textures"]
+
+        # Pattern displacement mask
+        Pattern "disp_mask" "dispMask"
+                "reference float dispAmount" ["dispPattern:resultF"]
+
+        # Displacement shader for numbers
+        Displace "PxrDisplace" "numberDisp"
+                 "reference float dispScalar" ["dispPattern:resultF"]
+                 "float dispAmount" [-0.04]
+
+        ReadArchive "../models/D20_subdiv.rib"
+    AttributeEnd
+
+    # Die two
+    AttributeBegin
+        # Displacement
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+
+        # Displacement pattern to get unique number per face
+        Pattern "number_per_face" "dispPattern"
+                "string tex_path" ["../textures"]
+
+        # Pattern displacement mask
+        Pattern "disp_mask" "dispMask"
+                "reference float dispAmount" ["dispPattern:resultF"]
+
+        # Displacement shader for numbers
+        Displace "PxrDisplace" "numberDisp"
+                 "reference float dispScalar" ["dispPattern:resultF"]
+                 "float dispAmount" [-0.04]
+
+        ReadArchive "../models/D20_subdiv.rib"
+    AttributeEnd
+
+    # Die three
+    AttributeBegin
+        # Displacement
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+
+        # Displacement pattern to get unique number per face
+        Pattern "number_per_face" "dispPattern"
+                "string tex_path" ["../textures"]
+
+        # Pattern displacement mask
+        Pattern "disp_mask" "dispMask"
+                "reference float dispAmount" ["dispPattern:resultF"]
+
+        # Displacement shader for numbers
+        Displace "PxrDisplace" "numberDisp"
+                 "reference float dispScalar" ["dispPattern:resultF"]
+                 "float dispAmount" [-0.04]
+
+        ReadArchive "../models/D20_subdiv.rib"
+    AttributeEnd
+
+    # Die four
+    AttributeBegin
+        # Displacement
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+
+        # Displacement pattern to get unique number per face
+        Pattern "number_per_face" "dispPattern"
+                "string tex_path" ["../textures"]
+
+        # Pattern displacement mask
+        Pattern "disp_mask" "dispMask"
+                "reference float dispAmount" ["dispPattern:resultF"]
+
+        # Displacement shader for numbers
+        Displace "PxrDisplace" "numberDisp"
+                 "reference float dispScalar" ["dispPattern:resultF"]
+                 "float dispAmount" [-0.04]
+
+        ReadArchive "../models/D20_subdiv.rib"
+    AttributeEnd
+
+    # Die five
+    AttributeBegin
+        # Displacement
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+
+        # Displacement pattern to get unique number per face
+        Pattern "number_per_face" "dispPattern"
+                "string tex_path" ["../textures"]
+
+        # Pattern displacement mask
+        Pattern "disp_mask" "dispMask"
+                "reference float dispAmount" ["dispPattern:resultF"]
+
+        # Displacement shader for numbers
+        Displace "PxrDisplace" "numberDisp"
+                 "reference float dispScalar" ["dispPattern:resultF"]
+                 "float dispAmount" [-0.04]
+
+        ReadArchive "../models/D20_subdiv.rib"
+    AttributeEnd
+
+    # Table
+    AttributeBegin
+        Translate 0 0 -2
+        Rotate 90 1 0 0 
+        Scale 6 8 1
+
+        Pattern "tabletop" "tabletop_tex"
+                "string tex_path" ["../textures/wood.tx"]
+                # "float tile_u" [2.0]
+                # "float tile_v" [2.0]
+        Bxdf "PxrDisney" "tabletop_color" 
+             "reference color baseColor" ["tabletop_tex:Cout"]
+             "float roughness" [0.3]
+        Patch "bilinear" "P" [-0.5 -0.5 0.5 -0.5 0.5 0.5 0.5 -0.5 0.5 0.5 0.5 0.5]
+
+    AttributeEnd
+
+WorldEnd
