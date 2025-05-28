@@ -1,0 +1,9 @@
+shader tabletop(
+    string tex_path = "", 
+    output color Cout = 0 
+)
+{   
+
+    Cout = texture(tex_path, v, u, "wrap", "periodic");
+    
+}

@@ -1,0 +1,13 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: 
+shader disp_mask
+param	float	dispAmount	0.100000001		%read{0,0} %write{2147483647,-1}
+oparam	float	mask	0		%read{2147483647,-1} %write{0,0}
+const	float	$const1	0.0900000036		%read{0,0} %write{2147483647,-1}
+const	float	$const2	0.109999999		%read{0,0} %write{2147483647,-1}
+code ___main___
+# ../shaders/disp_mask.osl:7
+#     mask = smoothstep(0.09, 0.11, dispAmount); // soft transition around 0.1
+	smoothstep	mask $const1 $const2 dispAmount 	%filename{"../shaders/disp_mask.osl"} %line{7} %argrw{"wrrr"}
+	end

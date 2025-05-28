@@ -1,0 +1,128 @@
+# RIB file with te main object
+
+#Display "Dice" "it" "rgb"
+Display "Dice" "../output/D20.exr" "file" "rgb"
+Format 1920 1080 1.0
+Projection "perspective" "fov" [20]
+Translate 0 0 7
+Integrator "PxrPathTracer" "integrator"
+
+WorldBegin    
+    # HDRI
+    AttributeBegin
+        Rotate 5 0 1 0
+        Rotate -45 0 0 1
+        Light "PxrDomeLight" "theLight" "float exposure" [0] 
+            "string lightColorMap" ["../wrestling_gym_4k.tx"] 
+            "float intensity" [0.5] 
+            "float specular" [0.7]
+    AttributeEnd
+    Translate -1.2 0 0
+    # Die object
+    AttributeBegin
+        Translate 0.7 -0.125 -2
+        Rotate -15 1 0 0
+        Rotate -15 0 0 1
+        Rotate 300 0 1 0
+        Scale 0.5 0.5 0.5
+
+        # Displacement bounds
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+
+        # Displacement shader pattern to get unique number per face
+        Pattern "../shaders/oso/number_per_face" "dispPattern"
+                "string tex_path" ["../textures"]
+
+        # Pattern displacement mask
+        Pattern "../shaders/oso/disp_mask" "dispMask"
+                "reference float dispAmount" ["dispPattern:resultF"]
+
+        # Displacement shader for numbers
+        Displace "PxrDisplace" "numberDisp"
+                 "reference float dispScalar" ["dispPattern:resultF"]
+                 "float dispAmount" [-0.03]
+
+        # Number colour shaders
+        Pattern  "../shaders/oso/paint_preset" "paint"
+
+        # Die colour shaders
+        Pattern "../shaders/oso/epoxy_preset" "epoxy"
+                "color Tint" [0.2 1.0 0.2]
+                "float IOR" [1.5]
+                "float Roughness" [0.2]
+                "float Transmission" [1.0]
+                "float Presence" [1.0]
+                "float Reflection" [0.2]
+
+        # Colour switch shader
+        Pattern "../shaders/oso/shader_switch" "final_colour" 
+                "reference float mask" ["dispMask:mask"] # shared mask
+                "reference color ColourDie" ["epoxy:Cout"] # shared Cout
+                "reference color ColourNum" ["paint:Cout"]
+                # pxr disney params
+                # "reference float RoughnessDie" ["plastic:Roughness"]
+                # "reference float RoughnessNum" ["metallic_paint:Roughness"]
+                # "reference float MetalDie" ["plastic:Metal"]
+                # "reference float MetalNum" ["metallic_paint:Metal"]
+                # "float ClearcoatDie" [0]
+                # "reference float ClearcoatNum" ["metallic_paint:Clearcoat"]
+                # pxr surface params
+                "reference float SpecRoughDie" ["epoxy:SpecRough"]
+                "reference float SpecRoughNum" ["paint:SpecRough"]
+                "reference color SpecularFaceColorDie" ["epoxy:SpecularFaceColor"] # TRY DIFFERENT VALUES AT SPECULAR FACE COLOR AND REFRACT COLOUR 
+                "reference color SpecularFaceColorNum" ["paint:SpecularFaceColor"]
+                "reference color SpecularIorDie" ["epoxy:SpecularIor"]
+                "reference color SpecularIorNum" ["paint:SpecularIor"]
+                "reference color RefractColorDie" ["epoxy:RefractColor"]
+                "reference color RefractColorNum" ["paint:RefractColor"]
+                "reference float RefractionGainDie" ["epoxy:RefractionGain"]
+                "reference float RefractionGainNum" ["paint:RefractionGain"]
+                "reference float ReflectionGainDie" ["epoxy:ReflectionGain"]
+                "reference float ReflectionGainNum" ["paint:ReflectionGain"]
+                "reference float PresenceDie" ["epoxy:PresenceOut"]
+                "reference float PresenceNum" ["paint:PresenceOut"]
+
+                
+
+        # # PxrDisney for most of the shaders
+        # Bxdf "PxrDisney" "for_d20"
+        #      "reference color baseColor" ["final_colour:Cout"]
+        #      "reference float roughness" ["final_colour:Roughness"]
+        #      "reference float metallic" ["final_colour:Metal"]
+        #      "reference float clearcoat" ["final_colour:Clearcoat"]
+             
+        #PxrSurface for the translucent shader
+        Bxdf "PxrSurface" "epoxy_die"
+             "reference color diffuseColor" ["final_colour:Cout"]
+             "float diffuseGain" [0.0]
+             "reference color specularFaceColor" ["final_colour:SpecularFaceColor"]
+             "reference color specularIor" ["final_colour:SpecularIor"]
+             "reference float specularRoughness" ["final_colour:SpecRough"]
+             "reference color refractionColor" ["final_colour:RefractColor"]
+             "reference float refractionGain" ["final_colour:RefractionGain"]
+             "reference float reflectionGain" ["final_colour:ReflectionGain"]
+             "reference float presence" ["final_colour:PresenceOut"]
+
+        # Load die object
+        ReadArchive "../models/D20_subdiv.rib"
+
+    AttributeEnd
+
+    # Table
+    AttributeBegin
+        Translate 0 0 -2
+        Rotate 90 1 0 0 
+        Scale 8 8 1
+
+        Pattern "../shaders/oso/tabletop" "tabletop_tex"
+                "string tex_path" ["../textures/wood.tx"]
+                # "float tile_u" [2.0]
+                # "float tile_v" [2.0]
+        Bxdf "PxrDisney" "tabletop_color" 
+             "reference color baseColor" ["tabletop_tex:Cout"]
+             "float roughness" [0.3]
+        Patch "bilinear" "P" [-0.5 -0.5 0.5 -0.5 0.5 0.5 0.5 -0.5 0.5 0.5 0.5 0.5]
+
+    AttributeEnd
+
+WorldEnd

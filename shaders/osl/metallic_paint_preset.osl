@@ -10,7 +10,7 @@ shader metallic_paint_preset(
 
     // PxrDisney outputs
     output float Roughness = 0,
-    output float Metallic = 0,
+    output float Metal = 0,
     output float Clearcoat = 0,
     
     // PxrSurface outputs
@@ -26,7 +26,7 @@ shader metallic_paint_preset(
     // PxrDisney outputs
     Cout = baseColor;
     Roughness = roughness;
-    Metallic = 1.0;       // metallic paint is fully metallic
+    Metal = 1.0;       // metallic paint is fully metallic
     Clearcoat = clearcoat;
 
     // PxrSurface outputs

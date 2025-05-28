@@ -1,0 +1,57 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.13.0.@PROJECT_VERSION_TWEAK@"dev"
+# options: -o ../shaders/oso/paint_preset.oso
+shader paint_preset
+param	color	baseColor	0.899999976 0.899999976 0.899999976		%read{0,7} %write{2147483647,-1}
+param	float	roughness	0.600000024		%read{1,4} %write{2147483647,-1}
+param	float	clearcoat	0.100000001		%read{3,3} %write{2147483647,-1}
+param	float	IOR	1.5		%read{6,6} %write{2147483647,-1}
+oparam	color	Cout	0 0 0		%read{2147483647,-1} %write{0,0}
+oparam	float	Roughness	0		%read{2147483647,-1} %write{1,1}
+oparam	float	Metal	0		%read{2147483647,-1} %write{2,2}
+oparam	float	Clearcoat	0		%read{2147483647,-1} %write{3,3}
+oparam	float	SpecRough	0		%read{2147483647,-1} %write{4,4}
+oparam	color	SpecularFaceColor	0 0 0		%read{2147483647,-1} %write{5,5}
+oparam	color	SpecularIor	0 0 0		%read{2147483647,-1} %write{6,6}
+oparam	color	RefractColor	0 0 0		%read{2147483647,-1} %write{7,7}
+oparam	float	RefractionGain	0		%read{2147483647,-1} %write{8,8}
+oparam	float	ReflectionGain	0		%read{2147483647,-1} %write{9,9}
+oparam	float	PresenceOut	1		%read{2147483647,-1} %write{10,10}
+const	float	$const1	0		%read{2,8} %write{2147483647,-1}
+const	float	$const2	0.200000003		%read{9,9} %write{2147483647,-1}
+const	float	$const3	1		%read{10,10} %write{2147483647,-1}
+code ___main___
+# ../shaders/osl/paint_preset.osl:26
+#     Cout = baseColor;
+	assign		Cout baseColor 	%filename{"../shaders/osl/paint_preset.osl"} %line{26} %argrw{"wr"}
+# ../shaders/osl/paint_preset.osl:27
+#     Roughness = roughness;
+	assign		Roughness roughness 	%line{27} %argrw{"wr"}
+# ../shaders/osl/paint_preset.osl:28
+#     Metal = 0.0;       // matte paint is non-metallic
+	assign		Metal $const1 	%line{28} %argrw{"wr"}
+# ../shaders/osl/paint_preset.osl:29
+#     Clearcoat = clearcoat;
+	assign		Clearcoat clearcoat 	%line{29} %argrw{"wr"}
+# ../shaders/osl/paint_preset.osl:32
+#     SpecRough = roughness;
+	assign		SpecRough roughness 	%line{32} %argrw{"wr"}
+# ../shaders/osl/paint_preset.osl:33
+#     SpecularFaceColor = baseColor;
+	assign		SpecularFaceColor baseColor 	%line{33} %argrw{"wr"}
+# ../shaders/osl/paint_preset.osl:34
+#     SpecularIor = color(IOR, IOR, IOR);
+	color		SpecularIor IOR IOR IOR 	%line{34} %argrw{"wrrr"}
+# ../shaders/osl/paint_preset.osl:35
+#     RefractColor = baseColor;
+	assign		RefractColor baseColor 	%line{35} %argrw{"wr"}
+# ../shaders/osl/paint_preset.osl:36
+#     RefractionGain = 0.0;      // matte paint is not transmissive
+	assign		RefractionGain $const1 	%line{36} %argrw{"wr"}
+# ../shaders/osl/paint_preset.osl:37
+#     ReflectionGain = 0.2;      // low reflection for matte
+	assign		ReflectionGain $const2 	%line{37} %argrw{"wr"}
+# ../shaders/osl/paint_preset.osl:38
+#     PresenceOut = 1.0;         // fully present (opaque)
+	assign		PresenceOut $const3 	%line{38} %argrw{"wr"}
+	end

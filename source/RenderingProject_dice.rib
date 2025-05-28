@@ -1,14 +1,11 @@
-# Starting the rib file for my renderman project
-#Option "searchpath" "shader" ["../shaders:&"]
-#SearchPath "shader" "."
+# RIB file with te main object
 
-Display "Dice" "it" "rgba"
+#Display "Dice" "it" "rgb"
+Display "Dice" "../output/D20.exr" "file" "rgb"
 Format 1920 1080 1.0
 Projection "perspective" "fov" [20]
 Translate 0 0 7
 Integrator "PxrPathTracer" "integrator"
-
-
 
 WorldBegin    
     # HDRI
@@ -17,21 +14,19 @@ WorldBegin
         Rotate -45 0 0 1
         Light "PxrDomeLight" "theLight" "float exposure" [0] 
             "string lightColorMap" ["../wrestling_gym_4k.tx"] 
-            "float intensity" [0.5]  # Adjust as needed
+            "float intensity" [0.5] 
             "float specular" [0.7]
     AttributeEnd
-    
+    Translate -1.2 0 0
     # Die object
     AttributeBegin
-        Translate 0.7 -0.1 -2
-        #Rotate -10 0 0 1
+        Translate 0.7 -0.125 -2
+        Rotate -15 1 0 0
+        Rotate -15 0 0 1
         Rotate 300 0 1 0
-        #Rotate 20 1 0 0
         Scale 0.5 0.5 0.5
-        #Rotate 65 0 1 0
-        #Rotate 15 1 0 0
 
-        # Displacement
+        # Displacement bounds
         Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
 
         # Displacement shader pattern to get unique number per face
@@ -45,21 +40,12 @@ WorldBegin
         # Displacement shader for numbers
         Displace "PxrDisplace" "numberDisp"
                  "reference float dispScalar" ["dispPattern:resultF"]
-                 "float dispAmount" [-0.04]
+                 "float dispAmount" [-0.03]
 
         # Number colour shaders
         Pattern  "../shaders/oso/paint_preset" "paint"
 
-        Pattern "../shaders/oso/metallic_paint_preset" "metallic_paint"
-
         # Die colour shaders
-        Pattern "../shaders/oso/plastic_preset" "plastic"
-
-        Pattern "../shaders/oso/perlin_colour_map" "perlin_colour"
-                "color ColorA" [0.9 0.1 0.0]
-                "color ColorB" [0.1 0.1 0.1]
-                "float scale" [1.0]
-
         Pattern "../shaders/oso/epoxy_preset" "epoxy"
                 "color Tint" [0.2 1.0 0.2]
                 "float IOR" [1.5]
@@ -117,18 +103,6 @@ WorldBegin
              "reference float reflectionGain" ["final_colour:ReflectionGain"]
              "reference float presence" ["final_colour:PresenceOut"]
 
-
-        # Bxdf "PxrSurface" "raw_epoxy"
-        #      "reference color diffuseColor" ["epoxy:Cout"]
-        #      "float diffuseGain" [0.0]
-        #      "reference color specularFaceColor" ["epoxy:SpecularFaceColor"]
-        #      "reference color specularIor" ["epoxy:SpecularIor"]
-        #      "reference float specularRoughness" ["epoxy:SpecRough"]
-        #      "reference color refractionColor" ["epoxy:RefractColor"]
-        #      "reference float refractionGain" ["epoxy:RefractionGain"]
-        #      "reference float reflectionGain" ["epoxy:ReflectionGain"]
-        #      "reference float presence" ["epoxy:PresenceOut"]
-
         # Load die object
         ReadArchive "../models/D20_subdiv.rib"
 
@@ -138,7 +112,7 @@ WorldBegin
     AttributeBegin
         Translate 0 0 -2
         Rotate 90 1 0 0 
-        Scale 6 8 1
+        Scale 8 8 1
 
         Pattern "../shaders/oso/tabletop" "tabletop_tex"
                 "string tex_path" ["../textures/wood.tx"]

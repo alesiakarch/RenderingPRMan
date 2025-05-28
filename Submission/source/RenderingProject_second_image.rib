@@ -1,0 +1,361 @@
+# RIB file with the secondary scene
+Display "Dice_scene" "it" "rgba"
+Format 1920 1080 1.0
+Projection "perspective" "fov" [20]
+Translate 0 0 7
+Integrator "PxrPathTracer" "integrator"
+
+WorldBegin
+    # HDRI
+    AttributeBegin
+        Rotate 5 0 1 0
+        Rotate -45 0 0 1
+        Light "PxrDomeLight" "theLight" "float exposure" [0] 
+            "string lightColorMap" ["../wrestling_gym_4k.tx"] 
+            "float intensity" [0.5]  
+            "float specular" [0.7]
+    AttributeEnd
+    Translate -0.1 0 -2
+    # Die one
+    AttributeBegin
+        # Displacement
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+
+        # Displacement pattern to get unique number per face
+        Pattern "../shaders/oso/number_per_face" "dispPattern"
+                "string tex_path" ["../textures"]
+
+        # Pattern displacement mask
+        Pattern "../shaders/oso/disp_mask" "dispMask"
+                "reference float dispAmount" ["dispPattern:resultF"]
+
+        # Displacement shader for numbers
+        Displace "PxrDisplace" "numberDisp"
+                 "reference float dispScalar" ["dispPattern:resultF"]
+                 "float dispAmount" [-0.04]
+                
+        # Numbers pattern
+        Pattern "../shaders/oso/metallic_paint_preset" "metallic_paint"
+
+        # Die pattern 
+        Pattern "../shaders/oso/plastic_preset" "plastic"
+                "float roughness" [0.2]
+        # Perlin gradient colour
+        Pattern "../shaders/oso/perlin_colour_map" "perlin_colour"
+        "color ColorA" [0.0 0.1 0.9]
+        "color ColorB" [0.0 0.3 0.7]
+        "float scale" [0.6]
+
+        # Colour switch shader
+        Pattern "../shaders/oso/shader_switch" "final_colour" 
+                "reference float mask" ["dispMask:mask"] # shared mask
+                "reference color ColourDie" ["perlin_colour:Cout"] # shared Cout
+                "reference color ColourNum" ["metallic_paint:Cout"]
+                # pxr disney params
+                "reference float RoughnessDie" ["plastic:Roughness"]
+                "reference float RoughnessNum" ["metallic_paint:Roughness"]
+                "reference float MetalDie" ["plastic:Metal"]
+                "reference float MetalNum" ["metallic_paint:Metal"]
+                "float ClearcoatDie" [0]
+                "reference float ClearcoatNum" ["metallic_paint:Clearcoat"]
+
+        # PxrDisney for most of the shaders
+        Bxdf "PxrDisney" "for_d20_1"
+             "reference color baseColor" ["final_colour:Cout"]
+             "reference float roughness" ["final_colour:Roughness"]
+             "reference float metallic" ["final_colour:Metal"]
+             "reference float clearcoat" ["final_colour:Clearcoat"]
+        TransformBegin
+                Translate 0 -0.32 0
+                Rotate -15 1 0 0
+                Rotate -15 0 0 1
+                Rotate 120 0 1 0
+                Scale 0.25 0.25 0.25
+
+                ReadArchive "../models/D20_subdiv.rib"
+        TransformEnd
+    AttributeEnd
+
+    # Die two
+    AttributeBegin
+        # Displacement
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+
+        # Displacement pattern to get unique number per face
+        Pattern "../shaders/oso/number_per_face" "dispPattern2"
+                "string tex_path" ["../textures"]
+
+        # Pattern displacement mask
+        Pattern "../shaders/oso/disp_mask" "dispMask2"
+                "reference float dispAmount" ["dispPattern2:resultF"]
+
+        # Displacement shader for numbers
+        Displace "PxrDisplace" "numberDisp2"
+                 "reference float dispScalar" ["dispPattern2:resultF"]
+                 "float dispAmount" [-0.04]
+                
+        # Numbers pattern
+        Pattern "../shaders/oso/paint_preset" "paint2"
+                "color baseColor" [1.0 0.1 0.1]
+
+        # Die pattern 
+        Pattern "../shaders/oso/plastic_preset" "plastic2"
+                "color baseColor" [0.1 0.1 0.1]
+                "float roughness" [0.35]
+
+        # Colour switch shader
+        Pattern "../shaders/oso/shader_switch" "final_colour2" 
+                "reference float mask" ["dispMask2:mask"] # shared mask
+                "reference color ColourDie" ["plastic2:Cout"] # shared Cout
+                "reference color ColourNum" ["paint2:Cout"]
+                # pxr disney params
+                "reference float RoughnessDie" ["plastic2:Roughness"]
+                "reference float RoughnessNum" ["paint2:Roughness"]
+                "reference float MetalDie" ["plastic2:Metal"]
+                "reference float MetalNum" ["paint2:Metal"]
+                "float ClearcoatDie" [0]
+                "reference float ClearcoatNum" ["paint2:Clearcoat"]
+
+        # PxrDisney for most of the shaders
+        Bxdf "PxrDisney" "for_d20_2"
+             "reference color baseColor" ["final_colour2:Cout"]
+             "reference float roughness" ["final_colour2:Roughness"]
+             "reference float metallic" ["final_colour2:Metal"]
+             "reference float clearcoat" ["final_colour2:Clearcoat"]
+
+        TransformBegin
+                Translate -0.35 -0.27 0.3
+                Rotate -15 1 0 0
+                Rotate -22 0 0 1
+                Rotate -100 0 1 0
+                Scale 0.3 0.3 0.3
+
+                ReadArchive "../models/D20_subdiv.rib"
+        TransformEnd
+    AttributeEnd
+
+    # Die three
+    AttributeBegin
+        # Displacement
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+
+        # Displacement pattern to get unique number per face
+        Pattern "../shaders/oso/number_per_face" "dispPattern3"
+                "string tex_path" ["../textures"]
+
+        # Pattern displacement mask
+        Pattern "../shaders/oso/disp_mask" "dispMask3"
+                "reference float dispAmount" ["dispPattern3:resultF"]
+
+        # Displacement shader for numbers
+        Displace "PxrDisplace" "numberDisp3"
+                 "reference float dispScalar" ["dispPattern3:resultF"]
+                 "float dispAmount" [-0.04]
+                
+        # Numbers pattern
+        Pattern "../shaders/oso/metallic_paint_preset" "metallic_paint3"
+
+        # Die colour shaders
+        Pattern "../shaders/oso/epoxy_preset" "epoxy3"
+                "color Tint" [1.0 0.1 0.1]
+                "float IOR" [1.5]
+                "float Roughness" [0.2]
+                "float Transmission" [1.0]
+                "float Presence" [1.0]
+                "float Reflection" [0.2]
+
+        # Colour switch shader
+        Pattern "../shaders/oso/shader_switch" "final_colour3" 
+                "reference float mask" ["dispMask3:mask"] # shared mask
+                "reference color ColourDie" ["epoxy3:Cout"] # shared Cout
+                "reference color ColourNum" ["metallic_paint3:Cout"]
+                # pxr surface params
+                "reference float SpecRoughDie" ["epoxy3:SpecRough"]
+                "reference float SpecRoughNum" ["metallic_paint3:SpecRough"]
+                "reference color SpecularFaceColorDie" ["epoxy3:SpecularFaceColor"] 
+                "reference color SpecularFaceColorNum" ["metallic_paint3:SpecularFaceColor"]
+                "reference color SpecularIorDie" ["epoxy3:SpecularIor"]
+                "reference color SpecularIorNum" ["metallic_paint3:SpecularIor"]
+                "reference color RefractColorDie" ["epoxy3:RefractColor"]
+                "reference color RefractColorNum" ["metallic_paint3:RefractColor"]
+                "reference float RefractionGainDie" ["epoxy3:RefractionGain"]
+                "reference float RefractionGainNum" ["metallic_paint3:RefractionGain"]
+                "reference float ReflectionGainDie" ["epoxy3:ReflectionGain"]
+                "reference float ReflectionGainNum" ["metallic_paint3:ReflectionGain"]
+                "reference float PresenceDie" ["epoxy3:PresenceOut"]
+                "reference float PresenceNum" ["metallic_paint3:PresenceOut"]
+
+        #PxrSurface for the translucent shader
+        Bxdf "PxrSurface" "for_d20_3"
+             "reference color diffuseColor" ["final_colour3:Cout"]
+             "float diffuseGain" [0.0]
+             "reference color specularFaceColor" ["final_colour3:SpecularFaceColor"]
+             "reference color specularIor" ["final_colour3:SpecularIor"]
+             "reference float specularRoughness" ["final_colour3:SpecRough"]
+             "reference color refractionColor" ["final_colour3:RefractColor"]
+             "reference float refractionGain" ["final_colour3:RefractionGain"]
+             "reference float reflectionGain" ["final_colour3:ReflectionGain"]
+             "reference float presence" ["final_colour3:PresenceOut"]
+
+        TransformBegin
+                Translate -0.38 0.14 0.25
+                Rotate -100 1 0 0 
+                Rotate 15 0 0 1
+                Rotate 0 0 1 0
+                Scale 0.25 0.25 0.25
+
+                ReadArchive "../models/D20_subdiv.rib"
+        TransformEnd
+    AttributeEnd
+
+    # Die four
+    AttributeBegin
+        # Displacement
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+
+        # Displacement pattern to get unique number per face
+        Pattern "../shaders/oso/number_per_face" "dispPattern4"
+                "string tex_path" ["../textures"]
+
+        # Pattern displacement mask
+        Pattern "../shaders/oso/disp_mask" "dispMask4"
+                "reference float dispAmount" ["dispPattern4:resultF"]
+
+        # Displacement shader for numbers
+        Displace "PxrDisplace" "numberDisp4"
+                 "reference float dispScalar" ["dispPattern4:resultF"]
+                 "float dispAmount" [-0.04]
+                
+        # Numbers pattern
+        Pattern "../shaders/oso/paint_preset" "paint4"
+                "color baseColor" [1.0 0.7 0.3]
+
+        # Die pattern 
+        Pattern "../shaders/oso/plastic_preset" "plastic4"
+        Pattern "../shaders/oso/perlin_colour_map" "perlin_colour4"
+        "color ColorA" [0.9 0.1 0.0]
+        "color ColorB" [0.1 0.1 0.1]
+        "float scale" [1.0]
+
+        # Colour switch shader
+        Pattern "../shaders/oso/shader_switch" "final_colour4" 
+                "reference float mask" ["dispMask4:mask"] # shared mask
+                "reference color ColourDie" ["perlin_colour4:Cout"] # shared Cout
+                "reference color ColourNum" ["paint4:Cout"]
+                # pxr disney params
+                "reference float RoughnessDie" ["plastic4:Roughness"]
+                "reference float RoughnessNum" ["paint4:Roughness"]
+                "reference float MetalDie" ["plastic4:Metal"]
+                "reference float MetalNum" ["paint4:Metal"]
+                "float ClearcoatDie" [0]
+                "reference float ClearcoatNum" ["paint4:Clearcoat"]
+
+        # PxrDisney for most of the shaders
+        Bxdf "PxrDisney" "for_d20_4"
+             "reference color baseColor" ["final_colour4:Cout"]
+             "reference float roughness" ["final_colour4:Roughness"]
+             "reference float metallic" ["final_colour4:Metal"]
+             "reference float clearcoat" ["final_colour4:Clearcoat"]
+
+        TransformBegin
+                Translate -0.82 -0.3 -0.1
+                Rotate 10 0 1 0
+                Rotate 20 1 0 0
+                Rotate -5 0 0 1
+                Scale 0.27 0.27 0.27
+
+                ReadArchive "../models/D20_subdiv.rib"
+        TransformEnd
+    AttributeEnd
+
+     # Die five
+    AttributeBegin
+        # Displacement
+        Attribute "displacementbound" "sphere" [0.5] "coordinatesystem" ["object"]
+
+        # Displacement pattern to get unique number per face
+        Pattern "../shaders/oso/number_per_face" "dispPattern5"
+                "string tex_path" ["../textures"]
+
+        # Pattern displacement mask
+        Pattern "../shaders/oso/disp_mask" "dispMask5"
+                "reference float dispAmount" ["dispPattern5:resultF"]
+
+        # Displacement shader for numbers
+        Displace "PxrDisplace" "numberDisp5"
+                 "reference float dispScalar" ["dispPattern5:resultF"]
+                 "float dispAmount" [-0.02]
+                
+        # Numbers pattern
+        Pattern "../shaders/oso/paint_preset" "paint5"
+
+        # Die colour shaders
+        Pattern "../shaders/oso/epoxy_preset" "epoxy5"
+                "color Tint" [0.2 1.0 0.2]
+                "float IOR" [1.5]
+                "float Roughness" [0.4]
+                "float Transmission" [1.0]
+                "float Presence" [1.0]
+                "float Reflection" [0.5]
+
+        # Colour switch shader
+        Pattern "../shaders/oso/shader_switch" "final_colour5" 
+                "reference float mask" ["dispMask5:mask"] # shared mask
+                "reference color ColourDie" ["epoxy5:Cout"] # shared Cout
+                "reference color ColourNum" ["paint5:Cout"]
+                # pxr surface params
+                "reference float SpecRoughDie" ["epoxy5:SpecRough"]
+                "reference float SpecRoughNum" ["paint5:SpecRough"]
+                "reference color SpecularFaceColorDie" ["epoxy5:SpecularFaceColor"] 
+                "reference color SpecularFaceColorNum" ["paint5:SpecularFaceColor"]
+                "reference color SpecularIorDie" ["epoxy5:SpecularIor"]
+                "reference color SpecularIorNum" ["paint5:SpecularIor"]
+                "reference color RefractColorDie" ["epoxy5:RefractColor"]
+                "reference color RefractColorNum" ["paint5:RefractColor"]
+                "reference float RefractionGainDie" ["epoxy5:RefractionGain"]
+                "reference float RefractionGainNum" ["paint5:RefractionGain"]
+                "reference float ReflectionGainDie" ["epoxy5:ReflectionGain"]
+                "reference float ReflectionGainNum" ["paint5:ReflectionGain"]
+                "reference float PresenceDie" ["epoxy5:PresenceOut"]
+                "reference float PresenceNum" ["paint5:PresenceOut"]
+
+        #PxrSurface for the translucent shader
+        Bxdf "PxrSurface" "for_d20_5"
+             "reference color diffuseColor" ["final_colour5:Cout"]
+             "float diffuseGain" [0.0]
+             "reference color specularFaceColor" ["final_colour5:SpecularFaceColor"]
+             "reference color specularIor" ["final_colour5:SpecularIor"]
+             "reference float specularRoughness" ["final_colour5:SpecRough"]
+             "reference color refractionColor" ["final_colour5:RefractColor"]
+             "reference float refractionGain" ["final_colour5:RefractionGain"]
+             "reference float reflectionGain" ["final_colour5:ReflectionGain"]
+             "reference float presence" ["final_colour5:PresenceOut"]
+
+        TransformBegin
+                Translate 0.7 -0.3 0.2 
+                Rotate 90 1 0 0 
+                Rotate 5 0 1 0
+                Scale 0.25 0.25 0.25
+
+                ReadArchive "../models/D20_subdiv.rib"
+        TransformEnd
+    AttributeEnd
+
+    # Table
+    AttributeBegin
+        Translate 0 0 -2
+        Rotate 90 1 0 0 
+        Scale 6 8 1
+
+        Pattern "../shaders/oso/tabletop" "tabletop_tex"
+                "string tex_path" ["../textures/wood.tx"]
+                # "float tile_u" [2.0]
+                # "float tile_v" [2.0]
+        Bxdf "PxrDisney" "tabletop_color" 
+             "reference color baseColor" ["tabletop_tex:Cout"]
+             "float roughness" [0.3]
+        Patch "bilinear" "P" [-0.5 -0.5 0.5 -0.5 0.5 0.5 0.5 -0.5 0.5 0.5 0.5 0.5]
+
+    AttributeEnd
+
+WorldEnd

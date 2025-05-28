@@ -1,0 +1,107 @@
+shader shader_switch(
+    // Shared Cout
+    color ColourDie = color(0.0, 0.0, 0.0),
+    color ColourNum = color(0.0, 0.0, 0.0),
+
+    // PxrDisney inputs
+    float RoughnessDie = 0,
+    float RoughnessNum = 0,
+    float MetalDie = 0,
+    float MetalNum = 0,
+    float ClearcoatDie = 0,
+    float ClearcoatNum = 0,
+
+    // PxrSurface inputs
+    float SpecRoughDie = 0,
+    float SpecRoughNum = 0,
+    color SpecularFaceColorDie = color(1,1,1),
+    color SpecularFaceColorNum = color(1,1,1),
+    color SpecularIorDie = color(1.5,1.5,1.5),
+    color SpecularIorNum = color(1.5,1.5,1.5),
+    color RefractColorDie = color(1,1,1),
+    color RefractColorNum = color(1,1,1),
+    float RefractionGainDie = 1.0,
+    float RefractionGainNum = 1.0,
+    float ReflectionGainDie = 1.0,
+    float ReflectionGainNum = 1.0,
+    float PresenceDie = 1.0,
+    float PresenceNum = 1.0,
+
+    // Shared mask
+    float mask = 0.0,
+
+    // PxrDisney outputs
+    output color Cout = 0,
+    output float Roughness = 0,
+    output float Metal = 0,
+    output float Clearcoat = 0,
+
+    // PxrSurface outputs
+    output float SpecRough = 0,
+    output color SpecularFaceColor = 0,
+    output color SpecularIor = 0,
+    output color RefractColor = 0,
+    output float RefractionGain = 0,
+    output float ReflectionGain = 0,
+    output float PresenceOut = 1.0
+)
+{
+    float clamped_mask = clamp(mask, 0, 1);
+
+    // PxrDisney outputs
+    Cout = mix(ColourDie, ColourNum, clamped_mask);
+    Roughness = mix(RoughnessDie, RoughnessNum, clamped_mask);
+    Metal = mix(MetalDie, MetalNum, clamped_mask);
+    Clearcoat = mix(ClearcoatDie, ClearcoatNum, clamped_mask);
+
+    // PxrSurface outputs
+    SpecRough = mix(SpecRoughDie, SpecRoughNum, clamped_mask);
+    SpecularFaceColor = mix(SpecularFaceColorDie, SpecularFaceColorNum, clamped_mask);
+    SpecularIor = mix(SpecularIorDie, SpecularIorNum, clamped_mask);
+    RefractColor = mix(RefractColorDie, RefractColorNum, clamped_mask);
+    RefractionGain = mix(RefractionGainDie, RefractionGainNum, clamped_mask);
+    ReflectionGain = mix(ReflectionGainDie, ReflectionGainNum, clamped_mask);
+    PresenceOut = mix(PresenceDie, PresenceNum, clamped_mask);
+
+    //Cout = color(mask, mask, mask);
+}
+// shader that changes two shaders between displaced and not displaced mesh
+
+
+// shader shader_switch(
+//     color ColourDie = color(0,0,0),
+//     color ColourNum = color(0,0,0),
+//     color SpecularFaceColorDie = color(0,0,0),
+//     color SpecularFaceColorNum = color(0,0,0),
+//     color SpecularIorDie = color(1.5,1.5,1.5),
+//     color SpecularIorNum = color(1.5,1.5,1.5),
+//     float SpecRoughDie = 0.2,
+//     float SpecRoughNum = 0.2,
+//     color RefractColorDie = color(0,0,0),
+//     color RefractColorNum = color(0,0,0),
+//     float RefractionGainDie = 1.0,
+//     float RefractionGainNum = 0.0,
+//     float ReflectionGainDie = 0.2,
+//     float ReflectionGainNum = 1.0,
+//     float PresenceDie = 1.0,
+//     float PresenceNum = 1.0,
+//     float mask = 0.0,
+//     output color Cout = 0,
+//     output color SpecularFaceColor = 0,
+//     output color SpecularIor = 0,
+//     output float SpecRough = 0,
+//     output color RefractColor = 0,
+//     output float RefractionGain = 0,
+//     output float ReflectionGain = 0,
+//     output float PresenceOut = 1.0
+// )
+// {
+//     Cout = mix(ColourDie, ColourNum, mask);
+//     SpecularFaceColor = mix(SpecularFaceColorDie, SpecularFaceColorNum, mask);
+//     SpecularIor = mix(SpecularIorDie, SpecularIorNum, mask);
+//     SpecRough = mix(SpecRoughDie, SpecRoughNum, mask);
+//     RefractColor = mix(RefractColorDie, RefractColorNum, mask);
+//     RefractionGain = mix(RefractionGainDie, RefractionGainNum, mask);
+//     ReflectionGain = mix(ReflectionGainDie, ReflectionGainNum, mask);
+//     PresenceOut = mix(PresenceDie, PresenceNum, mask);
+// }

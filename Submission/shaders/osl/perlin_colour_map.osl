@@ -1,0 +1,12 @@
+shader perlin_colour_map(
+    color ColorA = 0,
+    color ColorB = 0,
+    float scale = 5.0, // to control frequency
+    output color Cout = 0
+)
+{   
+    point p = transform("object", P * scale);
+    float n = noise("uperlin", p);
+    n = smoothstep(0.3, 0.6, n); 
+    Cout = mix(ColorA, ColorB, n);
+}

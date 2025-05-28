@@ -1,0 +1,14 @@
+shader number_per_face(
+    string tex_path = "",
+    float faceid = 0 [[ int lockgeom = 0 ]],
+    output float resultF = 0.0
+)
+{   
+    // convert the float primvar to an integer index
+    int fid = int(faceid+0.5);  // round to nearest integer
+    // use id to pick a texture tile:
+    string num_tex_path = concat(tex_path, "/number_", format("%d", fid), ".tx");
+
+    resultF = texture(num_tex_path, u, v);
+    
+}
